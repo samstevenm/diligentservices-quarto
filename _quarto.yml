@@ -1,0 +1,50 @@
+project:
+  type: website
+  title: "Diligent Services Inc."
+  output-dir: _site
+
+website:
+  title: "Diligent Services Inc."
+  site-url: https://<SITENAME.TLD>
+  description: "Diligent Services Inc. is a consulting company that specializes in building bespoke solutions."
+  repo-url: https://github.com/<USERNAME>/<REPONAME>
+  repo-actions: [issue]
+  favicon: images/favicon.ico
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "About"
+        href: about.qmd
+      - text: "Blog"
+        href: blog/index.qmd
+        menu:
+          - text: "Latest Posts"
+            href: blog/index.qmd
+          - text: "Categories"
+            href: blog/categories.qmd
+          - text: "Tags"
+            href: blog/tags.qmd
+      - text: "Contact"
+        href: contact.qmd
+      - text: "Docs"
+        href: README_.qmd
+    right:
+      - icon: linkedin
+        href: https://www.linkedin.com/in/<USERNAME>yers/
+      - icon: github
+        href: https://github.com/<USERNAME>/
+      - icon: envelope
+        href: mailto:sam@<SITENAME.TLD>
+
+format:
+  html:
+    theme: 
+      - journal 
+    # Here are some bootstrap theme options:
+    #   default, cerulean, cosmo, cyborg, darkly, flatly, journal, 
+    #   litera, lumen, lux, materia, minty, morph, pulse, quartz,
+    #   sandstone, simplex, sketchy, slate, solar, spacelab, superhero,
+    #   united, vapor, yeti, zephyr
+      - styles/custom.scss
+    css: styles/custom.scss

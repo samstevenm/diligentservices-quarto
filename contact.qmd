@@ -1,0 +1,15 @@
+---
+title: "Contact Us"
+format:
+  html:
+    toc: true
+---
+
+
+### Contact Us
+
+Ready to transform your space or incorporate smart home technology? Contact Diligent Services Inc today to discuss your project and discover how we can help you achieve your vision.
+
+- **Email**: quotes@dsgc123.com
+- **Phone**: (707) 554-0200
+- **Address:** Greater Los Angeles Area, CA
