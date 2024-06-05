@@ -1,0 +1,29 @@
+---
+title: "Welcome to Diligent Services Inc."
+format:
+  html:
+    toc: true
+---
+### Our Services
+
+- **Interior Remodeling:** Transforming kitchens, bathrooms, and living spaces to enhance functionality and aesthetics.
+- **Smart Home Technology:** Integrating modern smart home systems for convenience, security, and energy efficiency.
+- **Custom Projects:** Tailoring solutions to meet unique client needs and preferences, ensuring high satisfaction.
+- **Luxury AV Services:** Providing high-end audio-visual solutions to elevate your home entertainment experience.
+- **Home Automation Systems:** Implementing cutting-edge technology to automate and control various aspects of your home.
+- **Commercial Construction:** Managing and executing commercial construction and renovation projects with a focus on quality and efficiency.
+- **Technical Consulting:** Delivering expert advice on complex technical issues to enhance user experience and project outcomes.
+
+### Why Choose Us
+
+- **Experience and Expertise:** Over 20 years of experience in general contracting and a deep understanding of modern construction and renovation techniques.
+- **Family Values:** A family-operated business with a commitment to integrity, trust, and exceptional service.
+- **Client-Centered Approach:** We prioritize our clients' needs and preferences, providing personalized solutions and attentive service.
+
+### Our Mission
+
+At Diligent Services Inc, our mission is to deliver top-quality construction, renovation, and consulting services with a focus on excellence, integrity, and customer satisfaction. We aim to create spaces that are not only beautiful but also functional and reflective of our clients' lifestyles and values.
+
+### Blog
+
+Check out our blog for updates on the latest trends in construction, smart home technology, and luxury AV services. Or, more likely, sporadic posts on whatever Sam finds interesting.

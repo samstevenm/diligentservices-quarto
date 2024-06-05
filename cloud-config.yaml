@@ -1,0 +1,43 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+packages:
+  - git
+  - curl
+  - nginx
+  - certbot
+  - python3-certbot-nginx
+
+runcmd:
+  - curl -LO https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.555/quarto-1.4.555-linux-arm64.deb
+  - sudo dpkg -i quarto-1.4.555-linux-arm64.deb
+
+  # Configure Nginx
+  - mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+  - |
+    cat <<EOF > /etc/nginx/sites-available/<SITENAME>
+    server {
+        listen 80;
+        server_name <SITENAME.TLD> www.<SITENAME.TLD>;
+
+        location / {
+            root /var/www/<SITENAME>;
+            index index.html;
+        }
+    }
+    EOF
+
+  - ln -s /etc/nginx/sites-available/<SITENAME> /etc/nginx/sites-enabled/
+  - nginx -t
+  - systemctl reload nginx
+
+  # Create web root directory
+  - mkdir -p /var/www/<SITENAME>
+  - chown -R www-data:www-data /var/www/<SITENAME>
+
+  # Obtain SSL certificate
+  - certbot --nginx --non-interactive --agree-tos -m sam@<SITENAME.TLD> -d <SITENAME.TLD> -d www.<SITENAME.TLD>
+
+final_message: "The server is up and running with Quarto and Nginx. Please upload your Quarto project files to /var/www/<SITENAME>."
+

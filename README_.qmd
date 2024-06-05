@@ -1,0 +1,206 @@
+---
+title: "README_"
+format:
+  html:
+    toc: true
+---
+
+### Diligent Services Inc. Quarto Project
+
+This site was created using Quarto, an open-source scientific and technical publishing system. Below you will find detailed information about the project structure and how to update the site.
+
+## Project Structure
+
+The repository contains the following main files and directories:
+
+- `_quarto.yml`: Main configuration file.
+- `index.qmd`: Main page.
+- `about.qmd`: About page.
+- `contact.qmd`: Contact page.
+- `styles/custom.scss`: Custom styles.
+- `blog/*`: Blog posts.
+- `images/logo.png`: Company logo.
+- `_site/`: Generated site files (ignored in Git).
+- `.gitignore`: Git ignore file to exclude unnecessary files.
+- `cloud-config.yaml`: Cloud-init script for initial server setup.
+- `README_.qmd`: This file, providing meta information about the project.
+
+## Setup and Deployment
+
+### Prerequisites
+
+- Install [Quarto](https://quarto.org/docs/get-started/installation.html)
+- Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+
+### Initial Server Setup
+
+1. **Generate SSH Key** (if you don't have one):
+
+    ```bash
+    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+    ```
+
+2. **Add SSH Key to SSH Agent**:
+
+    ```bash
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/ssgh.pem
+    ```
+
+3. **Set Correct Permissions**:
+
+    ```bash
+    chmod 600 ~/.ssh/ssgh.pem
+    ```
+
+4. **Add SSH Key to GitHub**:
+
+    ```bash
+    cat ~/.ssh/ssgh.pem.pub
+    ```
+
+    - Copy the output and add it to your GitHub account under [SSH and GPG keys](https://github.com/settings/keys).
+
+5. **Verify SSH Connection to GitHub**:
+
+    ```bash
+    ssh -i ~/.ssh/ssgh.pem -T git@github.com
+    ```
+
+    You should see a message like:
+
+    ```
+    Hi <USERNAME>! You've successfully authenticated, but GitHub does not provide shell access.
+    ```
+
+6. **Configure SSH to Use the Specific Key**:
+
+    ```bash
+    vim ~/.ssh/config
+    ```
+
+    Add the following configuration:
+
+    ```plaintext
+    Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/ssgh.pem
+    ```
+
+    Save and exit the file (`:wq` *w*rites, then *q*uits vim. you heard it here again).
+
+7. **Clone the Repository on the Server**:
+
+    ```bash
+    cd /var/www/<SITENAME>
+    git clone git@github.com:<USERNAME>/<REPONAME>.git
+    ```
+
+8. **Obtain SSL Certificates**:
+
+    ```bash
+    sudo certbot certonly --webroot -w /var/www/<SITENAME>/<REPONAME>/_site -d <SITENAME.TLD> -d www.<SITENAME.TLD>
+    ```
+
+## Local Development
+
+9. **Clone the Repository Locally**:
+
+    ```bash
+    git clone git@github.com:<USERNAME>/<REPONAME>.git
+    cd <REPONAME>
+    ```
+
+10. **Edit Content and Styles**:
+
+    - Edit `.qmd` files to change content.
+    - Edit `styles/custom.scss` for custom styles.
+    - Add images to the `images/` directory.
+
+11. **Generate the Site Locally**:
+
+    ```bash
+    quarto render
+    ```
+
+12. **Commit and Push Changes to GitHub**:
+
+    ```bash
+    git add .
+    git commit -m "Updated content and styles"
+    git push origin main
+    ```
+
+## Updating the Site on the Server
+
+13. **SSH into the Server**:
+
+    ```bash
+    ssh -i ~/.ssh/ssgh.pem root@your_server_ip
+    ```
+
+14. **Navigate to the Project Directory**:
+
+    ```bash
+    cd /var/www/<SITENAME>/<REPONAME>
+    ```
+
+15. **Pull the Latest Changes from GitHub**:
+
+    ```bash
+    git pull origin main
+    ```
+
+16. **Generate the Site on the Server**:
+
+    ```bash
+    quarto render
+    ```
+
+    You should see output like:
+
+    ```
+    [1/6] contact.qmd
+    [2/6] index.qmd
+    [3/6] about.qmd
+    [4/6] <REPONAME>/contact.qmd
+    [5/6] <REPONAME>/index.qmd
+    [6/6] <REPONAME>/about.qmd
+
+    Output created: _site/index.html
+    ```
+
+17. **Reload Nginx to Apply Changes**:
+
+    ```bash
+    sudo systemctl reload nginx
+    ```
+
+## Nginx Folder Structure
+
+- `/etc/nginx/nginx.conf`: Main Nginx configuration file.
+- `/etc/nginx/sites-available/<SITENAME>`: Site-specific Nginx configuration file.
+- `/etc/nginx/sites-enabled/<SITENAME>`: Symlink to the site-specific configuration file.
+- `/var/www/<SITENAME>/`: Directory containing the website files.
+- `/var/www/<SITENAME>/<REPONAME>/_site/`: Directory containing the generated site files.
+
+## GitHub Folder Structure
+
+- `<REPONAME>/`: Root directory of the Quarto project.
+- `<REPONAME>/_quarto.yml`: Quarto configuration file.
+- `<REPONAME>/index.qmd`: Main page content.
+- `<REPONAME>/about.qmd`: About page content.
+- `<REPONAME>/contact.qmd`: Contact page content.
+- `<REPONAME>/styles/custom.scss`: Custom CSS styles.
+- `<REPONAME>/images/logo.png`: Company logo image.
+- `<REPONAME>/_site/`: Generated site files.
+- `<REPONAME>/.gitignore`: Git ignore file.
+- `<REPONAME>/cloud-config.yaml`: Cloud-init script.
+- `<REPONAME>/README.qmd`: This meta explanation file.
+
+### Customization
+
+- Edit `.qmd` files to change content.
+- Edit `styles/custom.scss` for custom styles.
+- Add images to the `images/` directory.

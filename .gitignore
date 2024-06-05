@@ -1,0 +1,8 @@
+_site/
+*.log
+*.tmp
+.DS_Store
+node_modules/
+/.quarto/
+/.quarto_cache/
+.venv/
