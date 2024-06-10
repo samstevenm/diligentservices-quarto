@@ -5,9 +5,9 @@ project:
 
 website:
   title: "Diligent Services Inc."
-  site-url: https://<SITENAME.TLD>
+  site-url: https://diligentservices.io
   description: "Diligent Services Inc. is a consulting company that specializes in building bespoke solutions."
-  repo-url: https://github.com/<USERNAME>/<REPONAME>
+  repo-url: https://github.com/samstevenm/diligentservices-quarto
   repo-actions: [issue]
   favicon: images/favicon.ico
   navbar:
@@ -31,11 +31,11 @@ website:
         href: README_.qmd
     right:
       - icon: linkedin
-        href: https://www.linkedin.com/in/<USERNAME>yers/
+        href: https://www.linkedin.com/in/samstevenmyers/
       - icon: github
-        href: https://github.com/<USERNAME>/
+        href: https://github.com/samstevenmyers/
       - icon: envelope
-        href: mailto:sam@<SITENAME.TLD>
+        href: mailto:sam@diligentservices.io
 
 format:
   html:
