@@ -1,0 +1,97 @@
+---
+author: Sam M
+categories:
+- troubleshooting
+- tutorials
+date: 2024-08-24
+format:
+  html:
+    code-fold: true
+    toc: true
+image: images/AppleTV-MacBook-Black-Screen.png
+tags:
+- Apple TV+
+- MacBook Pro
+- troubleshooting
+title: Apple TV+ Showing Black Screen on MacBook Pro? Here's a Workaround
+---
+
+### Apple TV+ Showing Black Screen on MacBook Pro
+
+![images/AppleTV-MacBook-Black-Screen.png](images/AppleTV-MacBook-Black-Screen.png)
+
+While trying to watch an episode on Apple TV+, you might encounter a black screen where only the audio and subtitles play, but no video. I’ve noticed this on a few Macs, and while I can’t pinpoint the exact cause, I suspect it may have something to do with DRM in combination with some screen recording utilities or accessibility features I’m using. It could also be related to my use of a beta version of macOS. Whatever the case, this issue has persisted across various combinations of MacBooks and macOS versions.
+
+### Workaround: Using a Web Browser
+
+If you're facing this issue, the workaround is surprisingly straightforward: use a web browser instead of the native Apple TV+ app or Safari. While it might seem counterintuitive, this approach has consistently worked.
+
+#### Supported Browsers
+- [Google Chrome](https://www.google.com/chrome/)
+- Microsoft Edge
+- Opera
+- Firefox
+
+*Note: Safari, unfortunately, redirects you back to the native Apple TV+ app, so it's not ideal for this workaround. Apple officially mentions using [Google Chrome](https://www.google.com/chrome/) or Firefox as alternatives in their [browser guide](https://support.apple.com/en-au/guide/tvplus/apdc0cb7ad64/web).*
+
+### Step-by-Step Guide
+
+#### 1. Install a Supported Browser:
+If you don't already have one of the supported browsers installed, download and install one of the following:
+- [Google Chrome](https://www.google.com/chrome/)
+- Microsoft Edge
+- Opera
+- Firefox
+
+#### 2. Open the Browser:
+Launch the browser you installed or already have on your Mac.
+
+#### 3. Navigate to Apple TV+:
+Go to [Apple TV+](https://tv.apple.com) and sign in with your Apple ID.
+
+#### 4. (Optional) Create a "Chrome App" for Apple TV+:
+If you prefer a more native app experience, you can create a shortcut that behaves similarly to a standalone app. This step is entirely optional, but it can make accessing Apple TV+ more convenient.
+
+**For Google Chrome:**
+1. Click on the three vertical dots (More) in the top right corner of the browser.
+2. Select **More tools**.
+3. Click on **Create shortcut...**.
+4. Check the box that says **Open as window**.
+5. Click **Create**.
+
+**For Microsoft Edge:**
+1. Click on the three horizontal dots (More) in the top right corner of the browser.
+2. Select **Apps**.
+3. Click on **Install this site as an app**.
+4. Name the app and click **Install**.
+
+**For Opera:**
+1. Click on the Opera menu in the top left corner.
+2. Select **Extensions**.
+3. Click on **Install Chrome Extensions**.
+4. Follow the same steps as for Google Chrome to create a shortcut.
+
+**For Firefox:**
+Firefox does not natively support creating standalone apps, but you can use extensions like **WebApp** to achieve similar functionality.
+
+#### 5. Access the "Chrome App":
+Once created, the "Chrome App" will show up in Spotlight search and can be launched like any other application on your Mac. This provides a more reliable experience for watching Apple TV+ content.
+
+### Additional Notes
+- **Apple's Guide:** For more detailed instructions on watching Apple TV+ in a web browser, refer to [Apple Support](https://support.apple.com/en-au/guide/tvplus/apdc0cb7ad64/web). Apple specifically mentions using Chrome or Firefox for the best experience.
+- **Other Browsers:** Browsers like Brave and Opera may support similar features for creating standalone apps. The steps are generally similar to those for Chrome and Edge.
+
+### Summary
+By following these steps, you can create a browser-based app for Apple TV+ that circumvents the issues with the native app on your Mac. This method leverages the capabilities of modern browsers to provide a seamless streaming experience, even when the native solutions fall short.
+
+### Best Practices:
+- Ensure your browser is up to date.
+- Use a browser that supports creating standalone apps for the best experience.
+- Refer to Apple's official guide for additional support and troubleshooting.
+
+### References
+- [Apple Support: How to watch in a web browser](https://support.apple.com/en-au/guide/tvplus/apdc0cb7ad64/web)
+- [Google Chrome](https://www.google.com/chrome/)
+- Microsoft Edge
+- Opera
+- Firefox
