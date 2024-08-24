@@ -53,23 +53,23 @@ Go to [Apple TV+](https://tv.apple.com) and sign in with your Apple ID.
 If you prefer a more native app experience, you can create a shortcut that behaves similarly to a standalone app. This step is entirely optional, but it can make accessing Apple TV+ more convenient.
 
 **For Google Chrome:**
-1. Click on the three vertical dots (More) in the top right corner of the browser.
-2. Select **More tools**.
-3. Click on **Create shortcut...**.
-4. Check the box that says **Open as window**.
-5. Click **Create**.
+  1. Click on the three vertical dots (More) in the top right corner of the browser.
+  2. Select **More tools**.
+  3. Click on **Create shortcut...**.
+  4. Check the box that says **Open as window**.
+  5. Click **Create**.
 
 **For Microsoft Edge:**
-1. Click on the three horizontal dots (More) in the top right corner of the browser.
-2. Select **Apps**.
-3. Click on **Install this site as an app**.
-4. Name the app and click **Install**.
+  1. Click on the three horizontal dots (More) in the top right corner of the browser.
+  2. Select **Apps**.
+  3. Click on **Install this site as an app**.
+  4. Name the app and click **Install**.
 
 **For Opera:**
-1. Click on the Opera menu in the top left corner.
-2. Select **Extensions**.
-3. Click on **Install Chrome Extensions**.
-4. Follow the same steps as for Google Chrome to create a shortcut.
+  1. Click on the Opera menu in the top left corner.
+  2. Select **Extensions**.
+  3. Click on **Install Chrome Extensions**.
+  4. Follow the same steps as for Google Chrome to create a shortcut.
 
 **For Firefox:**
 Firefox does not natively support creating standalone apps, but you can use extensions like **WebApp** to achieve similar functionality.
