@@ -6,3 +6,4 @@ node_modules/
 /.quarto/
 /.quarto_cache/
 .venv/
+.python-version
