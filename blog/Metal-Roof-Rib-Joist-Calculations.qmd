@@ -1,6 +1,7 @@
 ---
 title: "Aluminum Roof Rib-Joist Calculations"
 author: Sam M
+date: 2024-10-08
 categories:
 - guides
 - tutorials
