@@ -23,36 +23,42 @@ tags:
 ---
 
 
-# Aluminum Roof Rib-Joist Calculations  
-_How to Calculate and Visualize Arc Lengths for Aluminum Roofs and Plywood Rib Joists with Python._
+## Aluminum Roof Rib-Joist Calculations with Python
+![images/Metal-Roof-Rib-Joist-Calculations.png](images/Metal-Roof-Rib-Joist-Calculations.png)
+_Calculating and Visualizing Arc Lengths for Aluminum Roofs and Plywood Rib Joists with Python, Quarto and Visual Studio Code as starting point for CNC iterations._
 
 ## TL;DR
-This guide aims to calculate the **arc lengths** of an aluminum roof, the **top** and **bottom** of plywood rib joists, and then visualize and segment them for CNC cutting. Using Python, we'll compute the **arc radii**, **heights**, and dimensions, and plot detailed diagrams of the structures.
+This guide covers the arc length calculations for a aluminum roofs that will have undermounted curving plywood rib joists. These calculations are intended for initial cutting with CNC, but lengths and dimensions may need to be adjusted as we refine the process. Below, we compute and visualize the arc radii, heights, and key dimensions. While this version provides the base design, we expect iterative modifications as we cut, test, and adjust dimensions before finalizing in “Part 2.”
 
----
+--- 
 
 ## Requirements Recap
 
 ### Three Arcs to Calculate:
-1. **Aluminum Roof (Arc 1)** – The primary arc of the roof.
-2. **Top of Plywood Arch (Arc 2)** – Offset by a **2-inch air gap** below the aluminum roof (see `DEFAULT_AIR_GAP_INCHES`).
-3. **Bottom of Plywood Arch (Arc 3)** – Offset by the **10-inch plywood rib height** from the top (see `DEFAULT_RIB_HEIGHT_INCHES`).
+1.	Aluminum Roof (Arc 1) – The main arc defining the roof’s curve.
+2.	Top of Plywood Arch (Arc 2) – Offset by a 2-inch air gap below the roof.
+3.	Bottom of Plywood Arch (Arc 3) – Offset by the 10-inch plywood rib height from the top arch.
 
 ### Additional Project Details:
-- **Building Width**: The total width of the structure is **375 inches** (31' 2.375").
-- **Air Gap**: We aim for **2 inches** between the roof and top plywood arch.
-- **Plywood Rib Height**: The plywood ribs are **10 inches tall**.
+- Building Width: Total width = 375 inches (31’ 2.375”).
+- Air Gap: We’re starting with a 2-inch air gap, but we can adjust this if needed after the first cuts.
+- Plywood Rib Height: 10 inches tall per rib, but this height may also vary depending on fit and results from initial testing.
+
 
 ---
 
 ## Objectives
 
 ### Primary Goals:
-1. **Calculate** the radius and arc lengths for each of the three arcs.
-2. **Plot and visualize** the arcs for the aluminum roof and plywood ribs.
-3. **Annotate** key dimensions and angles directly on the plot.
-4. **Segment** the area between Arc 2 (top of plywood) and Arc 3 (bottom) to fit within **4x8 plywood sheets**.
-5. **Create partial rib segments** and output data for CNC cutting.
+1.	Calculate the radius and arc lengths for all three arcs.
+2.	Plot and visualize these arcs to preview the cuts.
+3.	Label key dimensions and angles directly on the plot.
+4.	Segment the area between the arcs for efficient plywood usage (4x8 sheets).
+5.	Generate partial rib segments for CNC cutting, while remaining open to modifying these segments in later iterations.
+
+#### Notes on Extensibility
+
+This guide is designed as a starting point & proof of concept for a custom build still in design. No plan survives first contact with the material: the dimensions, angles, and cutting process may evolve after the first rounds on the CNC. Once we cut the initial iterations, we’ll fine-tune based on what we observe, and come back to write “Part 2” with the finalized parameters.
 
 ---
 
@@ -404,7 +410,6 @@ slice_and_output_ribs_for_cnc(width_in_inches, height_roof, DEFAULT_AIR_GAP_INCH
 
 ---
 
-### Conclusion
+## Conclusion
 
-This guide provides a full solution for calculating and visualizing the aluminum roof arc and the plywood rib-joist arcs. Using Python, we automate the calculation of radii, arc lengths, and segments for CNC cutting. The results are visualized with detailed plots for precise fabrication and installation.
-
+This guide provides starting point for calculating and visualizing our aluminum roof arc and the plywood rib-joist arcs. Using Python, we automate the calculation of radii, arc lengths, and segments for CNC cutting. The results are visualized with detailed plots for CNC fabrication and installation.

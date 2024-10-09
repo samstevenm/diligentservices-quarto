@@ -1,7 +1,7 @@
 [project]
 name = "diligentservices-quarto"
 version = "0.1.0"
-description = "Add your description here"
+description = "Metal-Roof-Rib-Joist-Calculations"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
