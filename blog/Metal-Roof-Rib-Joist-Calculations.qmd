@@ -1,0 +1,410 @@
+---
+title: "Aluminum Roof Rib-Joist Calculations"
+author: Sam M
+categories:
+- guides
+- tutorials
+- engineering
+- construction
+format:
+  html: 
+    toc: true
+    code-fold: true
+    code-summary: "Show the code"
+image: images/Metal-Roof-Rib-Joist-Calculations.png
+tags:
+- guides
+- tutorials
+- engineering
+- construction
+- python
+- matplotlib
+- visualization
+---
+
+
+# Aluminum Roof Rib-Joist Calculations  
+_How to Calculate and Visualize Arc Lengths for Aluminum Roofs and Plywood Rib Joists with Python._
+
+## TL;DR
+This guide aims to calculate the **arc lengths** of an aluminum roof, the **top** and **bottom** of plywood rib joists, and then visualize and segment them for CNC cutting. Using Python, we'll compute the **arc radii**, **heights**, and dimensions, and plot detailed diagrams of the structures.
+
+---
+
+## Requirements Recap
+
+### Three Arcs to Calculate:
+1. **Aluminum Roof (Arc 1)** – The primary arc of the roof.
+2. **Top of Plywood Arch (Arc 2)** – Offset by a **2-inch air gap** below the aluminum roof (see `DEFAULT_AIR_GAP_INCHES`).
+3. **Bottom of Plywood Arch (Arc 3)** – Offset by the **10-inch plywood rib height** from the top (see `DEFAULT_RIB_HEIGHT_INCHES`).
+
+### Additional Project Details:
+- **Building Width**: The total width of the structure is **375 inches** (31' 2.375").
+- **Air Gap**: We aim for **2 inches** between the roof and top plywood arch.
+- **Plywood Rib Height**: The plywood ribs are **10 inches tall**.
+
+---
+
+## Objectives
+
+### Primary Goals:
+1. **Calculate** the radius and arc lengths for each of the three arcs.
+2. **Plot and visualize** the arcs for the aluminum roof and plywood ribs.
+3. **Annotate** key dimensions and angles directly on the plot.
+4. **Segment** the area between Arc 2 (top of plywood) and Arc 3 (bottom) to fit within **4x8 plywood sheets**.
+5. **Create partial rib segments** and output data for CNC cutting.
+
+---
+
+## Mathematical Formulas
+
+### Radius of Curvature
+
+The **radius** $$ R $$ for each arc is calculated using the following formula, derived from circular arc geometry:
+$$R = \frac{4H^2 + L^2}{8H}$$
+Where:
+  $H$ = height of the arc & $L$ = chord length (the building's width).
+
+### Arc Length
+
+The **arc length** ($L_{arc}$) of each arc is given by the formula for a semicircle:
+$$L_{arc} = \pi \times R$$
+Where $R$ is the radius calculated above.
+
+---
+
+## Python Setup 🐍
+
+```{python}
+# Initing vars ⏳...
+import numpy as np
+import matplotlib.pyplot as plt
+from IPython.display import display, Markdown
+
+# Constants
+INCHES_PER_FOOT = 12
+PLYWOOD_WIDTH = 96   # inches (8 feet)
+PLYWOOD_LENGTH = 96  # inches (8 feet)
+
+# Default Project Dimensions
+DEFAULT_WIDTH_FEET = 31
+DEFAULT_WIDTH_INCHES = 3
+DEFAULT_HEIGHT_FEET = 11
+DEFAULT_HEIGHT_INCHES = 2.375
+DEFAULT_AIR_GAP_INCHES = 2  # inches (air gap between aluminum and top of plywood arch)
+DEFAULT_RIB_HEIGHT_INCHES = 10  # inches (height of the plywood rib)
+```
+
+---
+
+## Function Definitions
+
+### 1. Functions for Radius and Arc Length Calculation 🐍
+```{python}
+# Convert feet and inches to total inches for easy dimensional calculations
+def convert_to_inches(feet, inches):
+    return feet * INCHES_PER_FOOT + inches
+
+# Calculates the radius of curvature based on the height and width of the arc
+def calculate_radius(H, L):
+    """
+    Calculate the radius of an arc using the formula:
+    R = (4H^2 + L^2) / (8H)
+    """
+    return (4 * H**2 + L**2) / (8 * H)
+
+# Calculate arc lengths for the aluminum roof and the plywood rib
+def calculate_arc_lengths(width, height_roof, air_gap, rib_height):
+    """
+    Calculate radii and arc lengths for the aluminum roof (top), 
+    top of the plywood rib, and bottom of the plywood rib.
+    """
+    # Calculate radius and arc length for the aluminum roof (Arc 1)
+    radius_roof = calculate_radius(height_roof, width)
+    arc_length_roof = np.pi * radius_roof
+
+    # Calculate radius and arc length for the top of the plywood rib (Arc 2)
+    height_rib_top = height_roof + air_gap
+    radius_rib_top = calculate_radius(height_rib_top, width)
+    arc_length_rib_top = np.pi * radius_rib_top
+
+    # Calculate radius for the bottom of the plywood rib (Arc 3)
+    radius_rib_bottom = radius_rib_top - rib_height
+    arc_length_rib_bottom = np.pi * radius_rib_bottom
+
+    return {
+        "radius_roof": radius_roof,
+        "arc_length_roof": arc_length_roof,
+        "radius_rib_top": radius_rib_top,
+        "arc_length_rib_top": arc_length_rib_top,
+        "radius_rib_bottom": radius_rib_bottom,
+        "arc_length_rib_bottom": arc_length_rib_bottom,
+    }
+```
+
+---
+
+### 2. Function for Plotting Arcs for Visualization 🐍
+
+```{python}
+# Generate theta values for plotting the arcs (from 0 to pi)
+def plot_arcs(width, height_roof, air_gap, rib_height):
+    """
+    Plot the aluminum roof arc, top of plywood rib arc, and bottom of plywood rib arc.
+    Annotate relevant dimensions and angles.
+    """
+    arc_data = calculate_arc_lengths(width, height_roof, air_gap, rib_height)
+
+    # Generating theta values for the arcs
+    num_points = 100
+    theta = np.linspace(0, np.pi, num_points)
+
+    # Generate x and y coordinates for each arc, shifted to start from (0,0)
+    x_roof = arc_data['radius_roof'] * np.cos(theta) + (width / 2) + INCHES_PER_FOOT
+    y_roof = arc_data['radius_roof'] * np.sin(theta)
+
+    x_rib_top = arc_data['radius_rib_top'] * np.cos(theta) + (width / 2) + INCHES_PER_FOOT
+    y_rib_top = arc_data['radius_rib_top'] * np.sin(theta)
+
+    x_rib_bottom = arc_data['radius_rib_bottom'] * np.cos(theta) + (width / 2) + INCHES_PER_FOOT
+    y_rib_bottom = arc_data['radius_rib_bottom'] * np.sin(theta)
+
+    # Plotting the arcs
+    plt.figure(figsize=(12, 8.5))
+
+    plt.plot(x_roof, y_roof, label='Aluminum Roof (Arc 1)', color='grey')
+    plt.plot(x_rib_top, y_rib_top, label='Top of Plywood Rib (Arc 2)', color='black', linestyle='--')
+    plt.plot(x_rib_bottom, y_rib_bottom, label='Bottom of Plywood Rib (Arc 3)', color='brown', linestyle='-.')
+
+    # Annotate arc lengths
+    plt.text(width / 2, arc_data['radius_rib_bottom'] - 8, f"Arc 1 Length: {arc_data['arc_length_roof']:.2f} in", color='grey')
+    plt.text(width / 2, arc_data['radius_rib_bottom'] - 12, f"Arc 2 Length: {arc_data['arc_length_rib_top']:.2f} in", color='black')
+    plt.text(width / 2, arc_data['radius_rib_bottom'] - 16, f"Arc 3 Length: {arc_data['arc_length_rib_bottom']:.2f} in", color='brown')
+
+    # Visualizing air gap and rib height
+    plt.vlines(x=width / 2, ymin=y_rib_top[0], ymax=y_roof[0], color='purple', linestyle='-', linewidth=2, label=f'Air Gap: {air_gap} in')
+    plt.vlines(x=width / 2, ymin=y_rib_bottom[0], ymax=y_rib_top[0], color='orange', linestyle='-', linewidth=2, label=f'Plywood Rib Height: {rib_height} in')
+
+    plt.xticks(np.arange(0, width + 24, 12))
+    plt.yticks(np.arange(0, arc_data['radius_rib_bottom'] + 24, 12))
+    plt.grid(True)
+
+    # Plot settings
+    plt.xlabel('Width (inches)')
+    plt.ylabel('Height (inches)')
+    plt.title('Visualization of Aluminum Roof and Plywood Rib Arcs (Upper Right Quadrant)')
+    plt.axhline(0, color='black', lw=0.5)
+    plt.axvline(0, color='black', lw=0.5)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+    print("Plotting complete... ✅")
+```
+
+
+### 3. Function to Create Installer Facing Markdown Output 🐍
+```{python}
+# Displaying the Markdown output for installers
+def extended_data_dump(width, height_roof, air_gap, rib_height):
+    """
+    Provides a full extended data dump with radii, arc lengths, and angles for Arc 1 (Aluminum Roof),
+    Arc 2 (Top of Plywood Rib), and Arc 3 (Bottom of Plywood Rib).
+    This data is useful for fabricators and installers.
+    """
+    # Calculate arc data
+    arc_data = calculate_arc_lengths(width, height_roof, air_gap, rib_height)
+
+    # Calculate key values for the dump
+    arc_lengths = {
+        "arc_1": arc_data['arc_length_roof'],
+        "arc_2": arc_data['arc_length_rib_top'],
+        "arc_3": arc_data['arc_length_rib_bottom']
+    }
+
+    radii = {
+        "radius_roof": arc_data['radius_roof'],
+        "radius_rib_top": arc_data['radius_rib_top'],
+        "radius_rib_bottom": arc_data['radius_rib_bottom']
+    }
+
+    # Print the extended data dump
+    print("\n## Raw Markdown Data for Fabricators & Installers\n")
+    
+    print(f"Width of Building: {width:.2f} inches")
+    print(f"Height of Aluminum Roof: {height_roof:.2f} inches")
+    print(f"Air Gap: {air_gap:.2f} inches")
+    print(f"Plywood Rib Height: {rib_height:.2f} inches")
+    
+    print("\n### Arc Lengths\n")
+    print(f"- **Arc 1 (Aluminum Roof)** Length: {arc_lengths['arc_1']:.2f} inches")
+    print(f"- **Arc 2 (Top of Plywood Rib)** Length: {arc_lengths['arc_2']:.2f} inches")
+    print(f"- **Arc 3 (Bottom of Plywood Rib)** Length: {arc_lengths['arc_3']:.2f} inches")
+    
+    print("\n### Radii\n")
+    print(f"- **Radius of Arc 1 (Aluminum Roof)**: {radii['radius_roof']:.2f} inches")
+    print(f"- **Radius of Arc 2 (Top of Plywood Rib)**: {radii['radius_rib_top']:.2f} inches")
+    print(f"- **Radius of Arc 3 (Bottom of Plywood Rib)**: {radii['radius_rib_bottom']:.2f} inches")
+
+    # Now compute the corresponding angles for Arc 1, Arc 2, and Arc 3
+    angle_arc_1 = np.pi  # since it's a semicircle, angle is always pi radians (180 degrees)
+    angle_arc_2 = np.pi
+    angle_arc_3 = np.pi
+    
+    print("\n### Angles\n")
+    print(f"- **Angle for Arc 1 (Aluminum Roof)**: {np.degrees(angle_arc_1):.2f} degrees")
+    print(f"- **Angle for Arc 2 (Top of Plywood Rib)**: {np.degrees(angle_arc_2):.2f} degrees")
+    print(f"- **Angle for Arc 3 (Bottom of Plywood Rib)**: {np.degrees(angle_arc_3):.2f} degrees")
+
+    print("\n### Notes for Fabricators and Installers\n")
+    print("The above data shows the radii and arc lengths for each of the three arcs.")
+    print("These dimensions are essential for cutting and assembling the plywood ribs.")
+    print("The angles for each arc are constant at 180 degrees, assuming a perfect semicircular shape.")
+    print("Ensure that the calculated air gap and rib height are maintained throughout the installation.")
+```
+
+---
+
+## Result & Plot 🐍
+
+```{python}
+# Plotting full curves & dumping data⏳...
+width_in_inches = convert_to_inches(DEFAULT_WIDTH_FEET, DEFAULT_WIDTH_INCHES)
+height_roof = convert_to_inches(DEFAULT_HEIGHT_FEET, DEFAULT_HEIGHT_INCHES)
+
+plot_arcs(width_in_inches, height_roof, DEFAULT_AIR_GAP_INCHES, DEFAULT_RIB_HEIGHT_INCHES)
+
+extended_data_dump(width_in_inches, height_roof, DEFAULT_AIR_GAP_INCHES, DEFAULT_RIB_HEIGHT_INCHES)
+```
+
+---
+
+### Partial Rib Segments for CNC Cutting
+
+Now, to continue plotting and representing how the **partial rib segments** can be cut from **4x8 plywood sheets**.
+
+### Key Objectives
+
+1. **Complete Plotting of Partial Ribs**: Finish representing how each rib segment is laid out across multiple plywood sheets.
+2. **Store and Verbosely Print Segment Information**: Store each rib segment and print the dimensions for clarity.
+3. **Continue with Efficient Visualization**: Provide a clear visual depiction of the partial rib segments.
+
+---
+
+### 4. Functions for Slicing & Plotting the Ribs for CNC Cutting 🐍:
+
+```{python}
+# Normalize coordinates to fit within plywood dimensions
+def normalize_coordinates(x_coords, y_coords, plywood_length, plywood_width):
+    min_x = min(x_coords)
+    min_y = min(y_coords)
+    x_normalized = [x - min_x for x in x_coords]
+    y_normalized = [y - min_y for y in y_coords]
+    return x_normalized, y_normalized
+
+# Function to slice and plot ribs and output all CNC data
+def slice_and_output_ribs_for_cnc(width, height_roof, air_gap, rib_height, plywood_width=PLYWOOD_WIDTH, plywood_length=PLYWOOD_LENGTH):
+    arc_data = calculate_arc_lengths(width, height_roof, air_gap, rib_height)
+    total_arc_length = arc_data['arc_length_rib_top']
+    num_segments = int(np.ceil(total_arc_length / plywood_length))
+    segment_arc_length = total_arc_length / num_segments
+    num_points = 1000
+    theta_full = np.linspace(0, np.pi, num_points)
+    arc_lengths_full = arc_data['radius_rib_top'] * theta_full
+    theta_boundaries = [np.interp(i * segment_arc_length, arc_lengths_full, theta_full) for i in range(num_segments + 1)]
+
+    # Output storage for all segment data
+    full_output = []
+
+    for i in range(num_segments):
+        theta_start = theta_boundaries[i]
+        theta_end = theta_boundaries[i + 1]
+        theta_segment = np.linspace(theta_start, theta_end, num_points)
+        x_top = arc_data['radius_rib_top'] * np.cos(theta_segment) + (width / 2)
+        y_top = arc_data['radius_rib_top'] * np.sin(theta_segment)
+        x_bottom = arc_data['radius_rib_bottom'] * np.cos(theta_segment) + (width / 2)
+        y_bottom = arc_data['radius_rib_bottom'] * np.sin(theta_segment)
+
+        # Offset and normalize coordinates for CNC plot
+        x_offset = x_top[0]
+        x_top_offset = x_top - x_offset
+        x_bottom_offset = x_bottom - x_offset
+        x_coords = list(x_top_offset) + list(x_bottom_offset)
+        y_coords = list(y_top) + list(y_bottom)
+        x_normalized, y_normalized = normalize_coordinates(x_coords, y_coords, plywood_length, plywood_width)
+        x_top_normalized = x_normalized[:num_points]
+        x_bottom_normalized = x_normalized[num_points:]
+        y_top_normalized = y_normalized[:num_points]
+        y_bottom_normalized = y_normalized[num_points:]
+
+        # Store segment data
+        segment_data = {
+            "segment": i + 1,
+            "theta_start": theta_start,
+            "theta_end": theta_end,
+            "top_left": (x_top_normalized[0], y_top_normalized[0]),
+            "top_right": (x_top_normalized[-1], y_top_normalized[-1]),
+            "bottom_left": (x_bottom_normalized[0], y_bottom_normalized[0]),
+            "bottom_right": (x_bottom_normalized[-1], y_bottom_normalized[-1]),
+            "arc_length_segment": segment_arc_length,
+        }
+        full_output.append(segment_data)
+
+        # Output CNC cutting details
+        print(f"### CNC Cutting Data for Segment {i + 1}")
+        print(f"- Theta Start: {theta_start:.4f} rad, Theta End: {theta_end:.4f} rad")
+        print(f"- **Top Left**: X: {segment_data['top_left'][0]:.2f}, Y: {segment_data['top_left'][1]:.2f}")
+        print(f"- **Top Right**: X: {segment_data['top_right'][0]:.2f}, Y: {segment_data['top_right'][1]:.2f}")
+        print(f"- **Bottom Left**: X: {segment_data['bottom_left'][0]:.2f}, Y: {segment_data['bottom_left'][1]:.2f}")
+        print(f"- **Bottom Right**: X: {segment_data['bottom_right'][0]:.2f}, Y: {segment_data['bottom_right'][1]:.2f}")
+        print(f"- **Arc Length for Segment**: {segment_arc_length:.2f} inches\n")
+        
+        # Plotting each segment for visualization
+        plt.figure(figsize=(12, 8))
+        plt.plot(x_top_normalized, y_top_normalized, label=f'Top Curve (Arc 2) of Segment {i + 1}', color='black')
+        plt.plot(x_bottom_normalized, y_bottom_normalized, label=f'Bottom Curve (Arc 3) of Segment {i + 1}', color='brown', linestyle='--')
+        plt.plot([x_top_normalized[0], x_bottom_normalized[0]], [y_top_normalized[0], y_bottom_normalized[0]], color='green', linestyle='--', label='Left Vertical Edge')
+        plt.plot([x_top_normalized[-1], x_bottom_normalized[-1]], [y_top_normalized[-1], y_bottom_normalized[-1]], color='orange', linestyle='--', label='Right Vertical Edge')
+        plt.xticks(np.arange(0, plywood_length + 1, 12))
+        plt.yticks(np.arange(0, plywood_width + 1, 12))
+        plt.grid(True)
+        plt.xlabel('Length (inches)')
+        plt.ylabel('Height (inches)')
+        plt.title(f'Plywood Cutting Plan for Segment {i + 1}')
+        plt.legend()
+
+        # Label rib height for each segment
+        plt.text(5, rib_height, f"Rib Height: {rib_height:.2f} in", rotation=0, va='center')
+        plt.text(5, 5, f"Segment {i + 1}", fontsize=14, color='blue', bbox=dict(facecolor='white', alpha=0.5))
+        plt.xlim(0, plywood_length)
+        plt.ylim(0, plywood_width)
+        plt.tight_layout()
+        plt.show()
+
+    # Print the Markdown data for fabricators and installers
+    print("\n## Raw Markdown Data for Fabricators & Installers\n")
+    for data in full_output:
+        print(f"Segment {data['segment']}:")
+        print(f"- Theta Start: {data['theta_start']:.4f} rad, Theta End: {data['theta_end']:.4f} rad")
+        print(f"- Top Left: {data['top_left']}, Top Right: {data['top_right']}")
+        print(f"- Bottom Left: {data['bottom_left']}, Bottom Right: {data['bottom_right']}")
+        print(f"- Arc Length: {data['arc_length_segment']:.2f} inches\n")
+```
+
+---
+
+## Results & Plots 🐍
+```{python}
+# Example usage of the function
+width_in_inches = convert_to_inches(DEFAULT_WIDTH_FEET, DEFAULT_WIDTH_INCHES)
+height_roof = convert_to_inches(DEFAULT_HEIGHT_FEET, DEFAULT_HEIGHT_INCHES)
+
+# Call the function to slice and output with optimized plywood layout
+slice_and_output_ribs_for_cnc(width_in_inches, height_roof, DEFAULT_AIR_GAP_INCHES, DEFAULT_RIB_HEIGHT_INCHES)
+```
+
+---
+
+### Conclusion
+
+This guide provides a full solution for calculating and visualizing the aluminum roof arc and the plywood rib-joist arcs. Using Python, we automate the calculation of radii, arc lengths, and segments for CNC cutting. The results are visualized with detailed plots for precise fabrication and installation.
+
