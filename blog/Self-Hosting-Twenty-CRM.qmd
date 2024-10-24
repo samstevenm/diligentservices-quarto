@@ -1,0 +1,273 @@
+---
+title: "Self-Hosting Twenty CRM on diligentservices.io"
+description: "A detailed guide on deploying the Twenty CRM with Docker Engine, Nginx, and Tailscale on ARM-based Ubuntu 24.04."
+author: "Sam M"
+date: "2024-10-24"
+categories: 
+  - DevOps
+  - Self-Hosting
+  - CRM
+  - Guides
+  - Tutorials
+format:
+  html:
+    code-fold: true
+    toc: true
+image: images/Twenty-Hero.png
+tags:
+  - Twenty CRM
+  - Docker
+  - Nginx
+  - Tailscale
+---
+## Overview
+![images/Twenty-Hero.png](images/Twenty-Hero.png)
+
+
+This guide outlines how we deployed the **Twenty CRM** on our **ARM-based Ubuntu 24.04 server**. While [Twenty](https://twenty.com) offers great features, their **$9 per user per month** model can add up, and **self-hosting saves us from subscription creep**.  
+
+Although the process was fairly smooth, we had to install docker a bit differently and you'll note the subtly different `docker compose` instead of `docker-compose` from the official [Twenty.com self-hosting documentation](https://twenty.com/developers/section/self-hosting/docker-compose). After a few wrong turns with docker, we realized we needed to use `docker-compose-plugin` indead of `docker-compose` which ships with Docker Desktop it seems likely that everything might "JustWorksTM". 
+
+We’re managing the server over SSH via [Tailscale](https://tailscale.com)—see our [Docs](https://www.diligentservices.io/README_.html) for more on that setup.
+
+---
+
+## Step 1: System Checks and Prerequisites
+
+### 1.1 Verify Architecture and OS Version
+
+```bash
+uname -a
+```
+
+Expected Output (ARM example):
+
+```plaintext
+Linux ubuntu-4gb-hel1-1 6.8.0-40-generic #40-Ubuntu SMP PREEMPT_DYNAMIC aarch64 GNU/Linux
+```
+
+```bash
+lsb_release -a
+```
+Expected Output:
+
+```plaintext
+Distributor ID: Ubuntu  
+Description:    Ubuntu 24.04 LTS  
+Release:        24.04  
+Codename:       noble
+```
+
+## Step 2: Install Docker Engine on ARM-Based Ubuntu 24.04
+
+	1.	Install prerequisites:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg lsb-release
+```
+
+	2.	Add Docker’s GPG key:
+
+```bash
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+```
+
+	3.	Set up Docker’s repository:
+
+```bash
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+	4.	Install Docker and Docker Compose:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io \
+    docker-buildx-plugin docker-compose-plugin
+```
+
+	5.	Verify Docker installation:
+
+```bash
+sudo docker run hello-world
+```
+
+
+## Step 3: Deploy Twenty CRM with Docker Compose
+
+	1.	Create and navigate to the working directory:
+
+```bash
+mkdir -p /opt/twenty && cd /opt/twenty
+```
+
+	2.	Download Docker Compose files:
+
+```bash
+curl -O https://raw.githubusercontent.com/twentyhq/twenty/main/packages/twenty-docker/docker-compose.yml
+curl -o .env https://raw.githubusercontent.com/twentyhq/twenty/main/packages/twenty-docker/.env.example
+```
+
+	3.	Generate secure tokens:
+
+```bash
+openssl rand -base64 32
+```
+Repeat this command to generate four random strings for the following:
+
+Use the generated values to update .env:
+```plaintext
+# /opt/twenty/.env
+...
+ACCESS_TOKEN_SECRET=first_random_string
+LOGIN_TOKEN_SECRET=second_random_string
+REFRESH_TOKEN_SECRET=third_random_string
+FILE_TOKEN_SECRET=fourth_random_string
+POSTGRES_ADMIN_PASSWORD=my_strong_password
+SERVER_URL=https://20.diligentservices.io
+```
+
+	4.	Start the containers:
+
+```bash
+docker compose up -d
+```
+
+	5.	Check if containers are running:
+
+```bash
+docker ps
+```
+![images/Twenty-Docker-PS.png](images/Twenty-Docker-PS.png)
+
+
+## Step 4: Configure Nginx as a Reverse Proxy
+
+	1.	Create the Nginx config:
+
+```bash
+vim /etc/nginx/sites-available/20.diligentservices.io
+```
+
+	2.	Add the following content:
+
+```yaml
+server {
+    listen 80;
+    server_name 20.diligentservices.io;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+    error_log /var/log/nginx/20.diligentservices.io.error.log;
+    access_log /var/log/nginx/20.diligentservices.io.access.log;
+}
+```
+
+	3.	Enable the configuration:
+
+```bash
+ln -s /etc/nginx/sites-available/20.diligentservices.io /etc/nginx/sites-enabled/
+```
+
+	4.	Test and reload Nginx:
+
+```bash
+nginx -t
+systemctl reload nginx
+```
+
+
+## Step 5: Troubleshooting: White Screen and Login Issues
+
+Despite the correct Nginx setup, I initially encountered a white screen. Running the following commands resolved the issue by installing many hidden dependencies:
+
+	1.	Run Yarn and reset the database:
+
+```bash
+docker exec -it twenty-server-1 yarn
+docker exec -it twenty-server-1 npx nx database:reset
+```
+![images/Twenty-Docker-Exec.png](images/Twenty-Docker-Exec.png)
+
+	2.	Restart the containers:
+
+```bash
+docker compose down
+docker compose up -d
+```
+
+
+If You Experience Reverse Proxy Issues
+
+	1.	Verify SERVER_URL:
+Ensure the SERVER_URL in your .env matches the external URL and uses https if SSL is enabled.
+
+## Step 6: Secure the Setup with SSL and Tailscale
+
+	1.	Get Certbot if not already installed:
+
+```bash
+apt update && apt install certbot python3-certbot-nginx -y
+```
+
+	2.	Obtain the SSL certificate:
+
+```bash
+certbot --nginx -d 20.diligentservices.io
+```
+Your Nginx configuration will be automatically updated to use SSL.
+
+	3.	Verify HTTPS:
+Open [20.diligentservices.io](https://20.diligentservices.io) to confirm the site is secure.
+
+![images/Twenty-Welcome.png](images/Twenty-Welcome.png)
+
+
+We’re managing this server securely using Tailscale. For more details on our setup, refer to the [README](../README_.qmd).
+
+## Step 7: Ongoing Management and Observations
+
+	•	Restart the service:
+```bash
+docker compose down && docker compose up -d
+```
+
+	•	View Nginx logs:
+
+```bash
+tail -f /var/log/nginx/20.diligentservices.io.error.log
+```
+
+	•	Update Tailscale:
+
+```bash
+tailscale update
+```
+
+
+### Open Signup Observations
+
+As of now, there’s no obvious way to prevent public signups on my instance. Feel free to play with the CRM at [https://20.diligentservices.io](https://20.diligentservices.io). Since I’m still testing it, I might purge the database, pay for the hosted service, or switch to another solution like Zoho or Salesforce—we’ll see how things go. Obviously, please don't depend on this for your real data.
+
+![images/Twenty-Logo-Upload.png](images/Twenty-Logo-Upload.png)
+
+
+### Conclusion
+
+Deploying Twenty CRM on our existing Hetzner ARM-based Ubuntu server is allowing us to evaluate the product without subscription fees. Despite some initial hiccups, the setup now works smoothly. 
+
+This guide should help anyone looking to self-host Twenty on similar infrastructure. For more on Quarto configuration and managing infrastructure, refer to our [README](../README_.qmd).
+
