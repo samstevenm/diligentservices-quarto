@@ -26,7 +26,7 @@ tags:
 
 This guide outlines how we deployed the **Twenty CRM** on our **ARM-based Ubuntu 24.04 server**. While [Twenty](https://twenty.com) offers great features, their **$9 per user per month** model can add up, and **self-hosting saves us from subscription creep**.  
 
-Although the process was fairly smooth, we had to install docker a bit differently and you'll note the subtly different `docker compose` instead of `docker-compose` from the official [Twenty.com self-hosting documentation](https://twenty.com/developers/section/self-hosting/docker-compose). After a few wrong turns with docker, we realized we needed to use `docker-compose-plugin` indead of `docker-compose` which ships with Docker Desktop it seems likely that everything might "JustWorksTM". 
+Although the process was fairly smooth, we had to install docker a bit differently and you'll note the subtly different `docker compose` instead of `docker-compose` from the official [Twenty.com self-hosting documentation](https://twenty.com/developers/section/self-hosting/docker-compose). After a few wrong turns with docker, we realized we needed to use `docker-compose-plugin` instead of `docker-compose` which ships with Docker Desktop it seems likely that everything might "JustWorksTM". 
 
 We’re managing the server over SSH via [Tailscale](https://tailscale.com)—see our [Docs](https://www.diligentservices.io/README_.html) for more on that setup.
 
