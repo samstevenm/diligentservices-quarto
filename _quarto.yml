@@ -1,12 +1,12 @@
 project:
   type: website
-  title: "Diligent Services Inc."
+  title: "Diligent Services"
   output-dir: _site
 
 website:
-  title: "Diligent Services Inc."
+  title: "Diligent Services"
   site-url: https://diligentservices.io
-  description: "Diligent Services Inc. is a consulting company that specializes in building bespoke solutions."
+  description: "Diligent Services is a consulting company that specializes in building bespoke solutions."
   repo-url: https://github.com/samstevenm/diligentservices-quarto/
   repo-actions: [issue]
   favicon: images/favicon.ico

@@ -1,5 +1,5 @@
 ---
-title: "Welcome to Diligent Services Inc."
+title: "Welcome to Diligent Services"
 format:
   html:
     toc: true
