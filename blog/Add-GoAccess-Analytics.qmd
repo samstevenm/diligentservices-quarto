@@ -1,0 +1,194 @@
+---
+title: "Adding Persistent Analytics with GoAccess in Quarto"
+description: "A step-by-step guide to setting up GoAccess with persistent, real-time analytics for a Quarto static site, with customization tips for different server configurations."
+author: "Sam M"
+date: "2024-12-08"
+categories: 
+  - Analytics
+  - Self-Hosting
+  - System Administration
+  - Web Development
+  - Tutorials
+format:
+  html:
+    code-fold: true
+    toc: true
+image: images/GoAccess-Hero.png
+tags:
+  - GoAccess
+  - Web Analytics
+  - Quarto
+  - Self-Hosting
+---
+
+## Overview
+![GoAccess Dashboard](images/GoAccess-Hero.png)
+
+GoAccess is a lightweight, server-based web analytics tool that processes server logs to provide real-time visitor insights. While powerful, its default behavior does not retain historical data across log rotations. In this guide, we’ll configure GoAccess to store cumulative analytics, handle log rotations seamlessly, and integrate into a Quarto static site. The commands and configurations attempt to be **idempotent**, to minimize disruption to existing setups. 
+
+Where needed, we’ll note areas that might require customization for your specific server (e.g., directories, log paths).
+
+---
+
+## Step 1: Install or Verify GoAccess
+
+First, ensure GoAccess is installed. If it’s already installed, this step will skip installation.
+
+### Check if GoAccess is Installed
+```sh
+if ! command -v goaccess &> /dev/null; then
+  sudo apt update && sudo apt install -y goaccess
+else
+  echo "GoAccess is already installed."
+fi
+```
+
+This ensures the installation runs only if GoAccess is missing.
+
+---
+
+## Step 2: Configure Persistent Analytics
+
+### Create a Database Path
+GoAccess uses a local database to retain historical analytics across restarts. Customize the directory path (`/var/lib/goaccess`) if needed.
+
+```sh
+DB_PATH="/var/lib/goaccess"
+if [ ! -d "$DB_PATH" ]; then
+  sudo mkdir -p "$DB_PATH"
+  sudo chown -R www-data:www-data "$DB_PATH"
+  echo "GoAccess database directory created."
+else
+  echo "GoAccess database directory already exists."
+fi
+```
+
+### Update the GoAccess Systemd Service
+
+Ensure GoAccess runs as a persistent, real-time analytics service. Replace `diligentservices` with your Quarto site's directory as needed.
+
+```sh
+SERVICE_FILE="/etc/systemd/system/goaccess.service"
+sudo tee "$SERVICE_FILE" > /dev/null <<EOF
+[Unit]
+Description=GoAccess Real-Time Web Analytics Service
+After=network.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/bin/goaccess /var/log/nginx/access.log \
+  --log-format=COMBINED \
+  --persist --restore \
+  -o /var/www/YOUR_SITE_DIRECTORY/_site/stats.html --real-time-html
+WorkingDirectory=/var/www/YOUR_SITE_DIRECTORY
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload and start the service
+sudo systemctl daemon-reload
+sudo systemctl enable goaccess
+sudo systemctl restart goaccess
+```
+
+Replace `YOUR_SITE_DIRECTORY` with the directory where your Quarto static site resides.
+
+---
+
+## Step 3: Handle Log Rotation
+
+Log rotation can interrupt GoAccess unless properly configured. Add a `postrotate` directive to NGINX’s `logrotate` configuration to restart GoAccess when logs rotate.
+
+### Update Log Rotation
+Append the following snippet if not already present:
+
+```sh
+LOGROTATE_FILE="/etc/logrotate.d/nginx"
+if ! grep -q "systemctl restart goaccess" "$LOGROTATE_FILE"; then
+  sudo tee -a "$LOGROTATE_FILE" > /dev/null <<'EOF'
+
+postrotate
+    systemctl restart goaccess
+endscript
+EOF
+  echo "GoAccess restart added to NGINX logrotate configuration."
+else
+  echo "Logrotate already configured for GoAccess."
+fi
+```
+
+---
+
+## Step 4: Optimize Real-Time HTML
+
+GoAccess uses WebSockets to provide real-time updates. Ensure the WebSocket port is open and that the output file (`stats.html`) is not cached in the browser.
+
+### Allow WebSocket Traffic
+```sh
+sudo ufw allow 7890/tcp
+```
+
+### Prevent Browser Caching
+Update your NGINX configuration to disable caching for `stats.html`. Replace `stats.html`'s location with your file's actual path if necessary:
+
+```sh
+NGINX_CONF="/etc/nginx/sites-available/default"
+if ! grep -q "Cache-Control" "$NGINX_CONF"; then
+  sudo tee -a "$NGINX_CONF" > /dev/null <<'EOF'
+location /stats.html {
+    add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+}
+EOF
+  sudo systemctl reload nginx
+  echo "Cache control headers added for stats.html."
+else
+  echo "Cache control headers already configured."
+fi
+```
+
+---
+
+## Step 5: Verify and Test
+
+### Manually Test GoAccess
+Run GoAccess manually to ensure it works:
+
+```sh
+/usr/bin/goaccess /var/log/nginx/access.log --log-format=COMBINED \
+  --persist --restore \
+  -o /var/www/YOUR_SITE_DIRECTORY/_site/stats.html --real-time-html
+```
+
+Replace `YOUR_SITE_DIRECTORY` with your specific Quarto directory.
+
+### Verify WebSocket Connection
+- Open `stats.html` in your browser.
+- Use browser developer tools (Network tab) to ensure the WebSocket connection (`ws://`) is active.
+
+### Check Logs for Issues
+Inspect systemd logs to debug potential errors:
+
+```sh
+journalctl -u goaccess
+```
+
+---
+
+## Customization Notes
+
+- **Log Path**: Adjust `/var/log/nginx/access.log` to your server’s log file location.
+- **Output File**: Replace `/var/www/YOUR_SITE_DIRECTORY/_site/stats.html` with the correct path for your static site.
+- **Directories**: Ensure paths like `/var/lib/goaccess` or `/var/www` match your server setup.
+
+---
+
+## Conclusion
+
+By following this idempotent setup, you’ve configured GoAccess to provide persistent, real-time analytics for your Quarto site. This approach ensures GoAccess handles log rotations seamlessly, retains historical data, and updates the analytics dashboard dynamically.
+
+For more customization and advanced options, consult the [GoAccess documentation](https://goaccess.io/documentation).
+
+**Happy analyzing!**
