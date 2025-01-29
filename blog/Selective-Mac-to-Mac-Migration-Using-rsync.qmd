@@ -1,0 +1,320 @@
+---
+title: "Selective Mac-to-Mac Migration Using rsync in 'Share Disk' Mode"
+author: "Sam M^"
+date: "2025-01-23"
+categories: [macOS, migration, rsync, system-administration]
+format: html
+---
+
+
+## Introduction
+
+Apple’s **Migration Assistant** is a convenient, official tool for moving data from one Mac to another. However, sometimes its user interface can be **frustrating** (e.g., getting stuck, forcing both Macs into kiosk mode until the transfer completes, etc.). 
+
+If you already have an existing user account on your destination Mac (that you **don’t** want to overwrite), Migration Assistant can be too blunt a tool. Cloning the old Mac’s entire disk (e.g., with Carbon Copy Cloner) can also overwrite or “clobber” data you want to keep on the new Mac.
+
+**Enter: rsync**. In this post, we’ll look at a custom script that uses a **modern** version of `rsync` to **selectively** copy data between two Macs while preserving:
+
+- Ownership and permissions  
+- Access Control Lists (ACLs)  
+- Extended attributes (xattrs)  
+
+... and skipping any files that already exist on the new Mac or are newer. We’ll connect the two Macs via **Share Disk** mode (the modern Apple silicon successor to Target Disk Mode), which allows you to mount the old Mac’s disk on the new Mac as if it were an external drive. 
+
+---
+
+## Why rsync?
+
+- **Granular control**: You decide how to handle potential overwrites. For instance, with `--update` or `--ignore-existing`, you can avoid clobbering existing files on the new Mac.  
+- **Preserves Mac-specific metadata** when using `-A` (ACLs) and `-X` (xattrs) — which the default macOS `rsync` might not support (you’ll likely need a [Homebrew-installed rsync](https://brew.sh/)).  
+- **Logging and resumability**: If you interrupt the process (Ctrl + C), you can re-run it, and rsync will pick up where it left off.
+
+---
+
+## The Plan
+
+1. **Prepare the old Mac**: Boot it into macOS Recovery and choose **Share Disk**, so it appears as an external volume on the new Mac.  
+2. **Mount the old Mac’s disk** on the new Mac via Finder → Network → Select the old Mac. It typically appears at `/Volumes/<DiskName>`.  
+3. **Run our script** (as `sudo`) on the new Mac. The script copies:  
+   1. **User’s home folder** from the old Mac, merging changes but not overwriting files if the new Mac’s copy is newer (`--update`).  
+   2. **/Applications** and **/Library/Preferences**, copying only missing apps or preferences.  
+   3. **Other top-level directories** so that missing items are copied but existing ones remain untouched.  
+4. **Validate**: Check logs for errors or leftover data that didn’t copy.  
+
+---
+
+## Setting up Share Disk Mode
+
+For Macs with Apple silicon (M1/M2/M3, etc.):
+
+1. **Shut down** the old Mac via Apple menu → Shut Down.  
+2. Press and hold the **power** button until **“Loading startup options”** appears.  
+3. Click **Options**, then **Continue**.  
+4. Select a startup disk, click **Next**, and enter an admin password if prompted.  
+5. Go to the **Utilities** menu → **Share Disk**.  
+6. Select the volume (e.g., “Macintosh HD”) and **Start Sharing**.  
+
+On the **new Mac**:
+
+1. Connect the two Macs with a USB-C/Thunderbolt cable.  
+2. Open **Finder**, go to **Network** in the sidebar, and double-click the old Mac to mount its shared disk.  
+3. The disk should appear in **Finder** under `/Volumes/<OldMacDisk>`. Note the path.
+
+---
+
+## Script Walkthrough
+
+Below is the **complete script**. Afterward, we’ll break it down by function.
+
+```bash
+#!/usr/bin/env bash
+# robust_macos_targetdiskmode_migration.sh
+# -----------------------------------------------------------------------------
+# Purpose:
+#   Safely migrate data from an old Mac (mounted in Share Disk mode) onto a new
+#   Mac, preserving permissions, ACLs, extended attributes, etc. 
+#   Non-destructive approach:
+#     1) The user's home directory is copied with --update (only overwrite if source is newer).
+#     2) /Applications and /Library/Preferences are copied with --ignore-existing (no overwrites).
+#     3) Other top-level directories are copied with --ignore-existing and an exclude list.
+#
+# Usage:
+#   1. Mount the old Mac's disk in Share Disk mode. Suppose it appears at:
+#        /Volumes/OldMac
+#   2. Edit the OLD_DISK variable below if necessary.
+#   3. Run as root: 
+#        sudo ./robust_macos_targetdiskmode_migration.sh
+#   4. Watch the log for progress and results.
+#
+# NOTE: This requires a modern rsync (e.g. via Homebrew).
+# -----------------------------------------------------------------------------
+
+set -euo pipefail
+
+###############################################################################
+# CONFIGURATION
+###############################################################################
+LOG_FILE="$HOME/macos_migration.log"
+OLD_DISK="/Volumes/OldMac"       # Adjust to the actual mount point of the old Mac
+SRC_USER="<USERNAME>"            # The old Mac's user
+DEST_USER="<USERNAME>"                   # The new Mac's user
+
+# Paths on the old Mac volume
+RSYNC_SRC_HOME="$OLD_DISK/Users/$SRC_USER"
+RSYNC_SRC_APPS="$OLD_DISK/Applications"
+RSYNC_SRC_PREFS="$OLD_DISK/Library/Preferences"
+RSYNC_SRC_ROOT="$OLD_DISK/"
+
+# Paths on the new Mac
+NEW_HOME="/Users/$DEST_USER"
+
+# Exclude these system-critical directories from top-level copies
+TOP_LEVEL_EXCLUDES=(
+  "--exclude=/System"
+  "--exclude=/Network"
+  "--exclude=/Volumes"
+  "--exclude=/dev"
+  "--exclude=/private"
+  "--exclude=/proc"
+  "--exclude=/tmp"
+  "--exclude=/run"
+  "--exclude=/Users"    # We'll handle user homes specifically
+  "--exclude=.DS_Store"
+)
+
+###############################################################################
+# HELPER FUNCTIONS
+###############################################################################
+
+print_help() {
+  echo "robust_macos_targetdiskmode_migration.sh"
+  echo
+  echo "Copies user data from an old Mac disk mounted at $OLD_DISK to the new Mac,"
+  echo "ensuring minimal overwrites, preserving ACLs, xattrs, permissions, etc."
+  echo
+  echo "Usage: sudo $0"
+  echo "Make sure you have a modern rsync that supports -A and -X."
+  echo
+  exit 0
+}
+
+log_message() {
+  local level="$1"
+  local msg="$2"
+  echo "$(date '+%Y-%m-%d %H:%M:%S') [$level] $msg" | tee -a "$LOG_FILE"
+}
+
+check_root() {
+  if [[ $EUID -ne 0 ]]; then
+    log_message "ERROR" "Must run as root (sudo) to copy system directories."
+    exit 1
+  fi
+}
+
+###############################################################################
+# RSYNC WRAPPER
+###############################################################################
+do_rsync() {
+  local src="$1"
+  local dest="$2"
+  shift 2
+
+  log_message "INFO" "Starting rsync from '$src' to '$dest'"
+  local extra_args=("$@")
+
+  # We'll pass these flags:
+  #   -a -> archive (preserves perms, times, symlinks, etc.)
+  #   -A -> preserve ACLs
+  #   -X -> preserve extended attributes
+  #   -H -> preserve hard links
+  #   --partial -> resume partial transfers
+  #   --info=progress2 -> cumulative progress/time estimate
+  #   --log-file -> logs output
+  #   -v -> verbose listing
+  #
+  # NOTE: The built-in Apple rsync (2.6.9) doesn't support -A or -X,
+  #       so you need a newer version from Homebrew.
+  rsync -aAXH --partial --info=progress2 -v \
+    --log-file="$LOG_FILE" \
+    "${extra_args[@]}" \
+    "$src" "$dest" || {
+      log_message "ERROR" "rsync failed for source=$src destination=$dest"
+      exit 1
+    }
+
+  log_message "INFO" "Completed rsync from '$src' to '$dest'"
+}
+
+###############################################################################
+# COPY STEPS
+###############################################################################
+
+copy_user_home() {
+  log_message "INFO" "Copying user home: $RSYNC_SRC_HOME -> $NEW_HOME (with --update)"
+  # --update only overwrites if the source is newer
+  do_rsync "$RSYNC_SRC_HOME" "$NEW_HOME" "--update"
+}
+
+copy_applications() {
+  log_message "INFO" "Copying /Applications (ignore existing on the new Mac)"
+  do_rsync "$RSYNC_SRC_APPS" "/Applications" "--ignore-existing"
+}
+
+copy_preferences() {
+  log_message "INFO" "Copying /Library/Preferences (ignore existing on the new Mac)"
+  do_rsync "$RSYNC_SRC_PREFS" "/Library/Preferences" "--ignore-existing"
+}
+
+copy_top_level() {
+  log_message "INFO" "Copying top-level directories from $RSYNC_SRC_ROOT (ignore existing)"
+  do_rsync "$RSYNC_SRC_ROOT" "/" "--ignore-existing" "${TOP_LEVEL_EXCLUDES[@]}"
+}
+
+###############################################################################
+# MAIN
+###############################################################################
+main() {
+  if [[ $# -gt 0 ]]; then
+    if [[ "$1" == "--help" ]]; then
+      print_help
+    else
+      log_message "ERROR" "Unknown argument: $1"
+      exit 1
+    fi
+  fi
+
+  check_root
+
+  log_message "INFO" "Starting robust macOS migration in Share Disk mode."
+  log_message "INFO" "Old Mac volume: $OLD_DISK, user=$SRC_USER"
+  log_message "INFO" "New Mac user home: $NEW_HOME"
+
+  copy_user_home
+  copy_applications
+  copy_preferences
+  copy_top_level
+
+  log_message "INFO" "Migration complete. Check '$LOG_FILE' for details."
+}
+
+main
+```
+
+### Function Breakdown
+
+1. **`check_root`**  
+   Ensures we’re running with `sudo`, because copying into `/Applications` and `/Library/Preferences` requires elevated privileges.
+
+2. **`do_rsync`**  
+   - Wraps the actual `rsync` call.  
+   - Uses `-aAXH` to preserve ACLs, xattrs, hardlinks, etc.  
+   - `--info=progress2` gives an **overall** progress bar and estimated time for the entire transfer (not just per file).  
+   - `--partial` allows resuming an interrupted file transfer if you rerun the script.
+
+3. **`copy_user_home`**  
+   - Copies the old Mac’s `~/<USERNAME>` folder to `~/<USERNAME>` on the new Mac.  
+   - Uses `--update` to **only overwrite** if the source file is newer. This prevents losing any changes you might have made in `~/<USERNAME>` after partially configuring the new Mac.
+
+4. **`copy_applications`** and **`copy_preferences`**  
+   - Use `--ignore-existing`, so any existing items in `/Applications` or `/Library/Preferences` on the new Mac remain untouched. New or missing items from the old Mac get copied.
+
+5. **`copy_top_level`**  
+   - Copies **everything else** from the old Mac’s root to the new Mac’s `/`, ignoring existing files and excluding critical system paths (like `/System`, `/Network`, etc.) that might conflict.
+
+---
+
+## Speed & Performance Tips
+
+- **Use a modern rsync**: The Apple-bundled `/usr/bin/rsync` is often version 2.6.9, which doesn’t support `-A`/`-X`. Install a newer one:
+  
+  ```bash
+  brew install rsync
+  which rsync
+  ```
+  
+  Ensure the new rsync is on your `$PATH` first.  
+
+- **Disable compression if local**: If you’re directly connected by Thunderbolt or USB-C, you can remove `-v -z` and add `--whole-file` for slightly faster throughput.  
+
+- **Consider a dry-run**: Add `-n` or `--dry-run` to your `rsync` flags if you want to see which files would transfer **before** actually writing anything.
+
+---
+
+## When (Not) to Use This
+
+- **Use this script** if you have an existing user on the new Mac, want to carefully add data from the old Mac, and skip overwriting critical files. It’s also valuable if **Migration Assistant** is failing or freezing, and you want more control.
+
+- **Don’t** use this script if you prefer a **full volume clone** (Carbon Copy Cloner, `asr` imaging) or if you want an entire, automated user migration with zero terminal usage (Migration Assistant might suffice if it works).
+
+---
+
+## Conclusion
+
+If you’ve run into **Migration Assistant** troubles or you’re trying to preserve a partially configured new Mac while merging data from an old Mac, **rsync** with Share Disk mode is a powerful alternative. This approach:
+
+- Preserves Mac-specific metadata (ACLs, xattrs).  
+- Avoids overwriting existing data on the new Mac.  
+- Provides a robust log and the ability to resume if interrupted.
+
+With some light configuration (and a [Homebrew-installed `rsync`](https://brew.sh/)), you can flexibly import exactly what you need from your old Mac—without the all-or-nothing approach of Migration Assistant or block-level cloning tools.
+
+Use the script above, tweak it for your environment (paths, user names, etc.), and enjoy a more transparent, custom migration from one Mac to another!
+
+---
+
+> **Pro Tip**: Always **back up** both Macs (Time Machine or another backup) before large data migrations. If something goes awry, you’ll have a safe point to revert to.
+---
+
+### **^Author’s Note**
+
+I often use large language models (LLMs) to speed up and refine my work, including this post. For this post, LLMs helped with to iterate on the initial bash script, and then with formatting this blog for Quarto. However, the idea, testing, (prompted) iteration, editing and final implementation are all "mine." Still, calling myself the sole “Author” feels weird—like leaning too heavily on a crutch.  
+
+At *Diligent Services*, we value thoroughness _and_ effort. Using tools like LLMs might look like taking shortcuts-- because it kind of is-- but I (presently) see them as accelerators for careful work—- provided I apply my own diligence. Part of this blog is about sharing what I’ve learned and building good habits around documenting processes so I (and others) don’t have to relearn things later.  
+
+I'm reminded of Galatians 6:11: “Ye see how large a letter I have written unto you with mine own hand.” Paul probably dictated most of his letters, but he made a point to personally add certain words to show his involvement. Similarly, while AI provides a foundation, my own “hand” is in the details and decisions that shaped the final product.  
+
+After I wrote this, but before publishing, I read a thoughtful piece aptly titled [AI Slop, Suspicion, and Writing Back](https://benjamincongdon.me/blog/2025/01/25/AI-Slop-Suspicion-and-Writing-Back/) on AI writing which provides a much more nuanced take on this complex issue, and was valuable to me as I figure out where I stand.
+
+> **Standard Disclaimer**  
+This post is a mix of human and AI effort (G611). While I’ve reviewed and finalized the content, some parts reflect AI-generated input. Always do your own due diligence and consult professionals when needed.  
+
