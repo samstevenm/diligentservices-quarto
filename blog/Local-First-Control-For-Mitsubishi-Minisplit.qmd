@@ -1,0 +1,63 @@
+---
+title: "Part 1: Finding a Local-First HVAC Control for Mitsubishi Systems"
+author: "Sam M^"
+date: "2025-08-01"
+categories: [HVAC, smart-home, integration, Diligent Services, Mitsubishi]
+format: html
+---
+
+> 🧪 This is Part 1 of a two-part deep dive. [Jump to Part 2 ➡️](#) (coming soon)
+
+## Introduction
+
+At Diligent Services, we’re always on the hunt for the best solutions to integrate into our AV and smart home projects, especially for our Accessory Dwelling Unit (ADU) builds. I’ve been digging into options for controlling my Mitsubishi HVAC system locally, without cloud dependency, but WITH local-first integration compatibility. This post kicks off a two-part series where I’ll share my journey, which led me to order four ProtoART ClimateControl units. Stay tuned for Part 2, where I’ll test them out and report back.
+
+---
+
+## Why This Matters
+
+I needed a reliable, production-ready solution I could sell into my projects. Mitsubishi’s default option left me exploring alternatives. Here’s how it's unfolded so far.
+
+---
+
+## The Journey So Far
+
+### Mitsubishi Kumo Cloud
+I started with Mitsubishi’s Kumo Cloud, now the Comfort app, which plugs into the CN104 connector. But it’s got a rough reputation—“plagued by bugs, missing core features like ‘auto mode,’ and a severe security flaw [CVE-2025-3699, CVSS 9.8](https://cybersecuritynews.com/mitsubishi-electric-ac-systems-vulnerability/) allowing remote takeovers.” This was an absolute non-starter.
+
+### Custom ESP8266 Dive
+That pushed me toward custom ESP8266 solutions. I found GitHub projects like [esphome-mitsubishiheatpump](https://github.com/geoffdavis/esphome-mitsubishiheatpump), which offer local control and Home Assistant integration.“They’re clever—offering direct remote control, model compatibility (e.g., MSZ-FH/GE), and Home Assistant support—but the soldering and firmware flashing made them feel too hacky for production deployments.
+
+### Airzone Consideration
+Then I remembered Airzone, a company I’ve followed for years, known for modules that work with nearly every HVAC unit, including Mitsubishi splits. Their Alexa/Google Home version ($179) relies on cloud services, which I wanted to avoid. The Pro version (~$250 per unit, ~$1000 for a four zone ADU) has everything I need: zoned control, smart thermostat integration—and I nearly went for it. If the ProtoART solution doesn't pan out or if I need to control something other than Mitsubishi, LG, or Panasonic, I'd definitely circle back to Airzone.
+
+### The Breakthrough
+Two days ago, while scrolling Hacker News, I stumbled across [clima.protoart.net](https://clima.protoart.net/) in a random comment related to yet another "Cloud First" failure [HN Thread](https://news.ycombinator.com/item?id=44726000) • [Ars Technica](https://arstechnica.com/gadgets/2025/07/bankrupt-futurehome-suddenly-makes-its-smart-home-hub-a-subscription-service/). It’s a plug-and-play Wi-Fi module for Mitsubishi heat pumps, offering local control with MQTT and HTTP REST APIs—looks to be a near-perfect fit for my local-first integration goals. Designed for pros and consumers, it supports centralized monitoring and quick setup (10 minutes).
+
+---
+
+## The Decision
+
+The price clinched it. I ordered four ProtoART ClimateControl units, and the email confirmation (dated July 30, 2025, order #ORD-183) showed €181.65 for the units, plus €17 shipping, totaling €198.65—about €45.41 each. That’s a steal compared to Airzone’s $250. I’m excited to test them and will share the results in Part 2.
+
+---
+
+## What’s Next?
+
+I’ll be putting these units through their paces, checking compatibility with my Mitsubishi models and integration with our systems. Look for an update soon with my hands-on findings. 
+
+---
+
+## Conclusion
+
+This journey reflects our commitment at Diligent Services to find practical, efficient solutions for our clients. ProtoART looks promising, but I’ll confirm that with testing. Stay tuned for the next chapter!
+
+---
+
+> 🧪 This is Part 1 of a two-part deep dive. [Jump to Part 2 ➡️](#) (coming soon)
+
+> **Author’s Note**  
+I lean on tools like large language models to speed up my writing, refining this post with their help. The idea, research, and final edits are mine, though—my “hand” shapes the outcome. Check out [AI Slop, Suspicion, and Writing Back](https://benjamincongdon.me/blog/2025/01/25/AI-Slop-Suspicion-and-Writing-Back/) for a deeper take on this balance.  
+
+> **Standard Disclaimer**  
+This post blends human and AI effort (G611). I’ve reviewed it thoroughly, but always verify for yourself and consult pros when needed.
