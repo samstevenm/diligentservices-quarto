@@ -2,15 +2,15 @@
 title: "Part 1: Finding a Local-First HVAC Control for Mitsubishi Systems"
 author: "Sam M^"
 date: "2025-08-01"
-categories: [HVAC, smart-home, integration, Diligent Services, Mitsubishi]
+categories: [HVAqC, smart-home, integration, Diligent Services, Mitsubishi]
 format: html
 ---
-
-> 🧪 This is Part 1 of a two-part deep dive. [Jump to Part 2 ➡️](#) (coming soon)
 
 ## Introduction
 
 At Diligent Services, we’re always on the hunt for the best solutions to integrate into our AV and smart home projects, especially for our Accessory Dwelling Unit (ADU) builds. I’ve been digging into options for controlling my Mitsubishi HVAC system locally, without cloud dependency, but WITH local-first integration compatibility. This post kicks off a two-part series where I’ll share my journey, which led me to order four ProtoART ClimateControl units. Stay tuned for Part 2, where I’ll test them out and report back.
+
+> 🧪 This is Part 1 of a two-part deep dive. [Jump to Part 2 ➡️](#) (coming soon)
 
 ---
 
