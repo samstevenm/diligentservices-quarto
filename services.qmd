@@ -1,37 +1,37 @@
 ---
 title: "Services"
 pagetitle: "Services — Diligent Services"
-description: "Lighting, audio/visual, control, and the systems behind them, designed and programmed and maintained for high-end Southern California homes."
+description: "Lighting, audio/visual, control, and the systems behind them, designed and programmed for high-end residential and commercial spaces across California and Nevada."
 toc: true
 toc-title: "On this page"
 ---
 
-We design, program, and maintain the systems a high-end home runs on. One team carries each project from design through commissioning and the years of service that follow, so the technology stays out of the way and the house stays effortless.
+We design, install, and program integrated lighting and control systems for high-end residential and commercial spaces across California and Nevada, from private estates and luxury active-adult communities to retail boutiques and hospitality interiors. The work is the same discipline at every scale: get the light, the sound, the control, and the network right, then make them disappear into a space that simply works.
 
 ## Lighting & Tunable Light
 
-Lighting is the first thing you feel in a room and the last thing you should have to think about. We design layered lighting and motorized shades around how a home is actually lived in: warm and quiet at night, bright and clean for work, and tuned to shift with the day. Scenes are programmed so a single press sets the whole room, and so the system reads as part of the architecture rather than a wall of switches.
+Architectural lighting and full-spectrum tunable light, designed and programmed so a room reads the way it should at every hour. We specify and commission fixtures and lighting control for residences, retail, and hospitality, with color and intensity that flatter a living space, a gallery wall, or a display case, on schedules and scenes that hold steady long after we leave.
 
 ## Audio / Visual
 
-Reference-grade media rooms, distributed audio throughout the home, and dedicated theaters tuned to the room they live in. We handle the displays, the sound, the sources, and the wiring behind them, and we program the control so the family can actually use what they paid for.
+Distributed audio, home theater, and display systems for homes and commercial interiors. We handle the room acoustics, the screens, and the sources, then tie them into the control system so playback is one clean gesture, whether that's a private screening room, whole-property music, or background audio and signage across a commercial floor.
 
 ## Control & Automation
 
-One calm interface for lighting, climate, shades, audio/visual, and security. We program automation that fits the household, not a generic template, so the right things happen at the right time and everything stays simple for whoever is holding the remote or the phone. The goal is a home that anyone in the family can run without a manual.
+One coherent control layer over lighting, shades, climate, audio, and video. We program the platforms that run the room, on a keypad, a touchscreen, or a phone, so a single press sets a scene, opens the house for the morning, or readies a venue for service. The goal is fewer decisions for the client, not more screens.
 
 ## Networking, Security & Infrastructure
 
-Everything above depends on a network that does not flinch. We design and install enterprise-grade Wi-Fi, structured wiring, cameras, and the structured backbone a connected home needs, built and labeled so it can be supported for years rather than rewired every time something changes.
+The wired and wireless backbone everything else depends on: structured cabling, managed networks, surveillance, and access control sized for the property. We build infrastructure that holds up under a full estate or a busy commercial floor, with the headroom and reliability a luxury install needs and the documentation to maintain it.
 
 ## Service & Support
 
-We treat the install as the start of a long relationship. Every system we deliver is documented and labeled, and we stay reachable when something needs attention. For a high-end home, dependable support is the part of the work that matters most.
+Systems we install are systems we stand behind. We offer ongoing service, monitoring, and updates for the lighting and control we deliver, resolving issues, adapting scenes as a space evolves, and keeping firmware and programming current. For multi-property and commercial clients, that means a single team that already knows the system.
 
 ::: {.platforms}
-**Platforms we work with.** We design and program on the platforms that define this category, including **Savant** and **Lutron**, chosen per project rather than per contract. The right system is the one that fits the home, not the one we are obligated to sell.
+**Platforms we work with.** We design around the platforms that hold up in luxury work and program them ourselves: **Savant** for whole-property control, **Lutron** for lighting control and shading, and **Ketra** as a tunable-light platform. We specify, install, and commission these systems. What we offer is the design and programming, not a dealer or certification badge.
 :::
 
 ---
 
-Ready to talk? [Request a consultation](contact.qmd){.btn-cta}
+Ready to talk? [Start a project](contact.qmd){.btn-cta}

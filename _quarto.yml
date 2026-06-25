@@ -6,12 +6,12 @@ project:
 website:
   title: "Diligent Services"
   site-url: https://diligentservices.io
-  description: "Diligent Services designs, programs, and maintains the lighting, control, and entertainment systems behind Southern California's finest homes. Lighting & control integration, based in the Greater Los Angeles area."
+  description: "Diligent Services designs, installs, and programs lighting, AV, control, and networking for high-end residential and commercial spaces across California and Nevada. A DBA of Carmelita Enterprises Inc, CSLB 1132892."
   repo-url: https://github.com/samstevenm/diligentservices-quarto/
   repo-actions: [issue]
   favicon: images/favicon.ico
   page-footer:
-    left: "Diligent Services · Lighting & Control Integration · Southern California"
+    left: "Diligent Services · Lighting & Control Integration · California & Nevada"
     center: "Diligent Services is a DBA of Carmelita Enterprises Inc."
     right:
       - text: "Support"

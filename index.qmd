@@ -1,19 +1,19 @@
 ---
 pagetitle: "Diligent Services — Lighting & Control Integration"
-description: "Lighting, control, and entertainment systems for Southern California's finest homes, designed and programmed and maintained by one accountable team."
+description: "Diligent Services designs, installs, and programs lighting, AV, control, and networking for high-end residential and commercial spaces across California and Nevada. A DBA of Carmelita Enterprises Inc, CSLB 1132892."
 page-layout: full
 toc: false
 anchor-sections: false
 ---
 
 ::: {.hero}
-[Lighting & Control Integration · Southern California]{.hero-eyebrow}
+[Lighting & Control Integration · California & Nevada]{.hero-eyebrow}
 
-[Light. Control.<br>Effortless living.]{.hero-title}
+[Light. Control.<br>Effortless.]{.hero-title}
 
-[Diligent Services designs, programs, and maintains the lighting, control, and entertainment systems that make Southern California's finest homes feel effortless. One accountable team, from design through the years of support that follow.]{.hero-sub}
+[We design, install, and program lighting, audio/visual, control, and networking for high-end homes and commercial spaces across California and Nevada. Quiet to operate, considered in every detail, built to disappear into the room.]{.hero-sub}
 
-[Request a consultation](contact.qmd){.btn-cta} [See what we do](services.qmd){.btn-ghost}
+[Start a project](contact.qmd){.btn-cta} [See our capabilities](services.qmd){.btn-ghost}
 :::
 
 <hr class="rule">
@@ -21,7 +21,7 @@ anchor-sections: false
 ::: {.section}
 [What we do]{.section-kicker}
 
-[We don't sell boxes. We design systems: specified, programmed, and documented so the technology serves the home instead of the other way around.]{.section-lead}
+[Four disciplines, integrated as one system. We specify and program platforms such as Lutron, Savant, and Ketra, then make them work together so a residence, a retail floor, or a hospitality venue behaves as a single, calm whole.]{.section-lead}
 
 ::: {.pillars}
 ::: {.pillar}
@@ -29,28 +29,28 @@ anchor-sections: false
 
 ### Lighting & Tunable Light
 
-Layered scenes, motorized shades, and warm-to-cool tuning that shifts with the day. Lighting designed to read as architecture rather than gadgetry.
+Layered, dimmable, color-tunable lighting that flatters a room and follows the day. The same discipline serves a private residence, a retail boutique, or a hospitality floor.
 :::
 ::: {.pillar}
 [02]{.ix}
 
 ### Audio / Visual
 
-Reference-grade media rooms, distributed audio, and theaters tuned to the room they live in.
+Distributed audio and video that reads cleanly in living spaces and across commercial properties, with sources, displays, and acoustics resolved before a single wire is pulled.
 :::
 ::: {.pillar}
 [03]{.ix}
 
 ### Control & Automation
 
-One calm interface that unifies lighting, climate, shades, AV, and security. Simple enough for everyone in the house to use.
+One interface for light, shade, climate, and media, so a home or a venue responds to a single touch, a schedule, or a scene without anyone tending it.
 :::
 ::: {.pillar}
 [04]{.ix}
 
 ### Networking & Infrastructure
 
-Enterprise-grade Wi-Fi, structured wiring, and the quiet, reliable backbone every connected home actually runs on.
+The wired and wireless backbone every other system depends on: structured cabling, resilient networks, and clean racks sized for homes and commercial sites alike.
 :::
 :::
 :::
@@ -62,25 +62,71 @@ Enterprise-grade Wi-Fi, structured wiring, and the quiet, reliable backbone ever
 
 ::: {.why}
 ::: {.tile}
-### One accountable team
+### Resi-mercial range
 
-Design, programming, installation, and support under one roof, so nothing falls between trades.
+Luxury residences and commercial spaces, from active-adult communities in Northern California to retail and hospitality work across California and Nevada.
 :::
 ::: {.tile}
-### Built to be serviced
+### Family-run, since 2002
 
-Every system labeled, documented, and supportable. When something needs attention, we answer.
+Founded by Tony and Barbara Myers, run today by Sam and Pearl Myers. A small team that answers for its own work and earns the next project by referral.
 :::
 ::: {.tile}
-### We put our name on it
+### We specify and program
 
-A family operation that stands behind the work. Licensed in California, and around long after the install crew leaves.
+Not box-movers. We design the system, integrate the platforms, write the programming, and commission it so it holds up after we leave.
+:::
+::: {.tile}
+### Licensed in California
+
+Carmelita Enterprises Inc, CSLB 1132892. Accountable and documented from proposal through closeout.
 :::
 :::
+:::
+
+<hr class="rule">
+
+::: {.section}
+[Selected work]{.section-kicker}
+
+[A working portfolio across California and Nevada, from luxury residential to commercial and hospitality. We design, program, and stand behind lighting and control on platforms including Lutron, Savant, and Ketra.]{.section-lead}
+
+::: {.work}
+::: {.work-card}
+[Builder programs]{.cat}
+
+### A multi-year program across Northern California
+
+We run an ongoing, multi-home program for a national homebuilder's luxury active-adult communities in the greater Sacramento region, delivering repeatable lighting, shading, and network packages across dozens of homes with full change-order support.
+:::
+::: {.work-card}
+[Commercial & retail]{.cat}
+
+### Lighting control for a globally recognized brand
+
+We're the lighting-control specialist on luxury retail boutiques for a globally recognized brand, modernizing aging proprietary control to a current Lutron platform with custom-engraved keypads and scene control, on tight overnight windows that keep flagship stores trading.
+:::
+::: {.work-card}
+[Hospitality · in development]{.cat}
+
+### Modernizing lighting for hospitality & nightlife
+
+We migrate legacy panel-based dimming in hospitality and nightlife venues to a current Lutron HomeWorks platform with tunable, dynamic feature lighting and remote-supportable scene control, so a venue can refresh its look without re-pulling its existing infrastructure.
+:::
+::: {.work-card}
+[Our reference estate]{.cat}
+
+### The 22-zone home where we prove every approach
+
+Our own reference installation is a 22-zone residence where we run Savant control over Lutron lighting end to end, the home we use to prove and refine every lighting, shading, and control approach before we put it in a client's space.
+:::
+:::
+
+[Client names withheld by agreement. We're glad to walk you through relevant work on a call.]{.work-note}
 :::
 
 ::: {.closing}
 ## Let's design something quietly extraordinary.
 
-[Request a consultation](contact.qmd){.btn-cta}
+[Start a project](contact.qmd){.btn-cta}
 :::

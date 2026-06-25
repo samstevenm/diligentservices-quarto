@@ -158,6 +158,37 @@ hr.rule { height: 1px; background: $ds-hair; border: 0; margin: 0; opacity: 1; }
   font-family: $font-family-sans-serif;
 }
 
+// ── Selected work band ──────────────────────────────────────────
+.work {
+  display: grid;
+  gap: 1.4rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+.work-card {
+  background: $ds-ink-2;
+  border: 1px solid $ds-hair;
+  border-radius: 3px;
+  padding: 1.8rem 1.6rem;
+}
+.work-card .cat {
+  display: block;
+  color: $ds-brass;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-family: $font-family-sans-serif;
+  margin-bottom: 0.9rem;
+}
+.work-card h3 { font-size: 1.12rem; margin: 0 0 0.6rem; color: $ds-paper; }
+.work-card p { color: $ds-muted; font-size: 0.96rem; margin: 0; }
+.work-note {
+  display: block;
+  color: $ds-muted;
+  font-size: 0.85rem;
+  font-style: italic;
+  margin-top: 1.6rem;
+}
+
 // ── Closing CTA ─────────────────────────────────────────────────
 .closing {
   text-align: center;
