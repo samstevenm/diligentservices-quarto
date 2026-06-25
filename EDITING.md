@@ -111,14 +111,19 @@ publish it. The site runs on the company's web server (Hetzner). The steps:
    (`git add <files you changed>`, `git commit -m "update copy"`, `git push`).
 2. Connect to the server over SSH (the login key is stored in the company
    1Password under "Hetzner | root | diligentservices.io").
-3. On the server:
+3. On the server, run the safe publish script:
    ```bash
    cd /var/www/diligentservices/diligentservices-quarto
-   git pull
-   source .venv/bin/activate   # required, or the blog posts fail to build
-   quarto render
+   ./publish.sh
    ```
-   The web server serves the freshly rendered `_site/` folder. No restart needed.
+   `publish.sh` backs up the current live site, pulls, renders, and — if any step
+   fails — automatically restores the previous version, so the live site is never
+   left half-broken. It prints the previous commit so you can roll back later. The
+   web server serves the rendered `_site/` folder directly; no restart needed.
+
+   (Raw steps it runs, if you ever need them by hand: `git pull`, then
+   `source .venv/bin/activate` — required, or the computational blog posts fail —
+   then `quarto render`.)
 
 > **Review before publish.** Public, client-facing copy should be read over (and,
 > for blog posts, approved by Sam) before this publish step. When in doubt, preview
@@ -126,7 +131,27 @@ publish it. The site runs on the company's web server (Hetzner). The steps:
 
 ---
 
-## 8. House rules
+## 8. Roll back a bad change
+
+Every published version is just a git commit, so nothing is ever truly lost — you
+can always put the previous version back, usually in under a minute. On the server:
+
+```bash
+cd /var/www/diligentservices/diligentservices-quarto
+git log --oneline          # find the last good commit (publish.sh also prints it)
+./rollback.sh <commit>     # e.g. ./rollback.sh dc8e93d
+```
+
+`rollback.sh` checks out that commit and re-renders, so the live site looks exactly
+like it did then. When you've fixed the problem and want to move forward again:
+
+```bash
+git checkout main && ./publish.sh
+```
+
+---
+
+## 9. House rules
 
 - **No client names or project specifics** on the public site unless you have
   written permission. Keep capability copy generic.
