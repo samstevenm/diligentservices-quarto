@@ -1,8 +1,8 @@
 ---
 title: "Part 1: Finding a Local-First HVAC Control for Mitsubishi Systems"
-author: "Sam M^"
+author: "Sam M"
 date: "2025-08-01"
-categories: [HVAqC, smart-home, integration, Diligent Services, Mitsubishi]
+categories: [HVAC, smart-home, integration, Diligent Services, Mitsubishi]
 format: html
 ---
 
@@ -10,7 +10,7 @@ format: html
 
 At Diligent Services, we’re always on the hunt for the best solutions to integrate into our AV and smart home projects, especially for our Accessory Dwelling Unit (ADU) builds. I’ve been digging into options for controlling my Mitsubishi HVAC system locally, without cloud dependency, but WITH local-first integration compatibility. This post kicks off a two-part series where I’ll share my journey, which led me to order four ProtoART ClimateControl units. Stay tuned for Part 2, where I’ll test them out and report back.
 
-> 🧪 This is Part 1 of a two-part deep dive. [Jump to Part 2 ➡️](#) (coming soon)
+> 🧪 This is Part 1 of a two-part deep dive. [Jump to Part 2 ➡️](Local-First-Control-For-Mitsubishi-Minisplit-Part-2.html)
 
 ---
 
@@ -54,7 +54,7 @@ This journey reflects our commitment at Diligent Services to find practical, eff
 
 ---
 
-> 🧪 This is Part 1 of a two-part deep dive. [Jump to Part 2 ➡️](#) (coming soon)
+> 🧪 This is Part 1 of a two-part deep dive. [Jump to Part 2 ➡️](Local-First-Control-For-Mitsubishi-Minisplit-Part-2.html)
 
 > **Author’s Note**  
 I lean on tools like large language models to speed up my writing, refining this post with their help. The idea, research, and final edits are mine, though—my “hand” shapes the outcome. Check out [AI Slop, Suspicion, and Writing Back](https://benjamincongdon.me/blog/2025/01/25/AI-Slop-Suspicion-and-Writing-Back/) for a deeper take on this balance.  

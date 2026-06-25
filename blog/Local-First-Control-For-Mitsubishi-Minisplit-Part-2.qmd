@@ -1,0 +1,289 @@
+---
+title: "Local-First Control for Mitsubishi Mini-Splits, Part 2: Talking to the Hardware"
+author: "Sam M."
+date: "2026-06-19"
+categories: [HVAC, smart-home, integration, Diligent Services, Mitsubishi]
+draft: false
+format: html
+---
+
+In [Part 1](Local-First-Control-For-Mitsubishi-Minisplit.html) I went looking
+for a way to control the estate's Mitsubishi mini-splits that didn't route every
+temperature change through someone else's cloud. The short version of how that
+ended: I ordered four [ProtoART ClimateControl](https://protoart.net) modules —
+small Wi-Fi boards that plug into the CN105 service port on each indoor head and
+expose a local HTTP and MQTT API — for about €45 each, versus the ~$250/unit
+Airzone alternative.
+
+This post is what happened when the boxes arrived and I plugged them in. The
+goal for Part 2 was narrow and concrete: **get something on the estate network
+talking to these units locally, with no account, no app, and no internet.**
+
+## Finding the units
+
+The modules join a dedicated IoT Wi-Fi network and advertise themselves over
+mDNS (Bonjour), so I didn't have to go hunting through the router's DHCP table.
+A quick browse for HTTP services turned them up immediately:
+
+```
+$ dns-sd -B _http._tcp local.
+...
+_http._tcp.   ClimateControl AABB01
+_http._tcp.   ClimateControl AABB02
+_http._tcp.   ClimateControl AABB03
+```
+
+Three units. I ordered four. (More on the missing one at the end.) Resolving
+each instance gives you the hostname, port, and — usefully — a TXT record that
+tells you most of what you need to know:
+
+```
+$ dns-sd -L "ClimateControl AABB01" _http._tcp local.
+ClimateControl AABB01._http._tcp.local. can be reached at GreatRoom-HVAC.local.:80
+  path=/control model=ME_CN105_ATA_WIFI fw=3.4.1 id=...
+  friendly_name=GreatRoom-HVAC name=HVAC_AABB01
+```
+
+So each board self-describes: the API lives at `/control`, the model is
+`ME_CN105_ATA_WIFI` (Mitsubishi Electric, CN105 connector, air-to-air),
+firmware 3.4.1, and I'd already named them by room — Great Room, Guest Suite,
+and Primary Suite.
+
+## Reading state
+
+The `/control` path returns the whole device as JSON. No authentication, no
+token, just a GET. Here's a live read from the Primary Suite unit, trimmed to the part
+that matters:
+
+```json
+{
+  "heatpump": {
+    "power": "off",
+    "mode": "cool",
+    "set_temperature": 69,
+    "actual_temperature": 78.0,
+    "tout": 77,
+    "fan": "high",
+    "vane": "1",
+    "widevane": "middle",
+    "oper": false,
+    "fault_code": "No error",
+    "coolmin": 61, "coolmax": 88,
+    "heatmin": 61, "heatmax": 88
+  }
+}
+```
+
+Everything I'd want from a thermostat is here: the setpoint, the room
+temperature it's controlling against, the outdoor temperature the heat pump is
+reporting, the fan and louver positions, whether the compressor is actually
+running, and the allowed setpoint range. That last detail matters — the unit
+tells *you* its limits (61–88 °F here) instead of making you guess.
+
+One thing worth flagging: the modules ship with MQTT **disabled** and pointed
+at a factory-default broker they'll never reach. That's fine. The HTTP API is
+enough, and it means there's nothing to stand up — no broker, no Home
+Assistant — to get going.
+
+## Writing state
+
+Reading is the easy half. To find the write path I pulled the module's own
+single-page web UI and read how *its* buttons send commands. They're plain GETs
+with a query string:
+
+```
+GET /control?cmd=heatpump&set_temperature=72
+GET /control?cmd=heatpump&power=on
+GET /control?cmd=heatpump&mode=cool
+GET /control?cmd=heatpump&fan=high
+```
+
+One property per request; the device echoes the new state back. It's not REST in
+the textbook sense — a GET that mutates state will make a purist wince — but
+it's trivial to drive and, crucially, it's *local*.
+
+## A small library and CLI
+
+I wrapped all of this in a little Python package (standard library only, so it
+runs anywhere without `pip install`), with a `cc` command on top. Status of the
+whole house in one line each:
+
+```
+$ cc status
+GreatRoom-HVAC      off  cool  set   69  room  81  out  77  fan high  vane auto  [idle]
+GuestSuite-HVAC     off  cool  set   71  room  83  out  77  fan low   vane swing [idle]
+PrimarySuite-HVAC   off  cool  set   69  room  78  out  77  fan high  vane 1     [idle]
+```
+
+Because these are real heat pumps in an occupied home, anything that *changes*
+state is dry-run by default — it prints exactly what it would send and touches
+nothing until you add `--apply`:
+
+```
+$ cc set GreatRoom-HVAC --mode cool --temp 72 --fan high
+DRY-RUN (no commands sent to 192.168.20.41). Re-run with --apply to send:
+  http://192.168.20.41/control?cmd=heatpump&mode=cool
+  http://192.168.20.41/control?cmd=heatpump&set_temperature=72
+  http://192.168.20.41/control?cmd=heatpump&fan=high
+```
+
+Every value is validated before it leaves the machine — ask for `--fan turbo`
+and it's rejected locally, not by a confused heat pump.
+
+## Native thermostats in Savant (the part that fought back)
+
+Controlling the units from a terminal is satisfying for about a day. What I
+actually wanted was for these to show up in the estate's Savant system as **thermostats**
+— the same tiles as everything else, no "open this other app" asterisk.
+
+Savant ships an integration for [CoolAutomation](https://coolautomation.com)'s
+CoolMasterNet, a well-known HVAC gateway that speaks a compact ASCII protocol
+over TCP. Savant already knows how to be a CoolMasterNet client. So instead of
+authoring a custom device profile, I wrote a small bridge that speaks
+CoolMasterNet on one side and the ProtoART HTTP API on the other:
+
+```
+Savant ──CoolMasterNet (TCP 10102)──▶ bridge ──HTTP /control──▶ mini-splits
+```
+
+The bridge maps each unit to a CoolMasterNet UID (`L1.100`…`L1.103`), answers
+the status command Savant polls, and translates on/off/cool/heat/setpoint/fan
+into HTTP calls.
+
+That diagram makes it look clean. It wasn't. Three things all had to be true
+before a single tile lit up, and each took a round of digging:
+
+1. **A subscription, not a hack.** Deploying any configuration to the host needs
+   an active Savant subscription, which read as inactive on the beta controller.
+   The fix was the boring, correct one — I activated a real license that was
+   already on the dealer account — not patching the check.
+
+2. **The wire format had to match byte-for-byte.** Savant connected fine, yet
+   every tile stayed dead. The driver polls `ls`, disables echo with
+   `set echo 0`, and reads a settings dump from a bare `set` to learn the
+   device's degree type — then parses each status line as *fixed-width fields*.
+   My first attempts emitted the wrong shape, so nothing parsed. The fix came
+   from reading the controller's own CoolMaster profile and matching its parser
+   exactly: a settings dump that reports the degree type, and status lines in
+   the precise field layout it expects.
+
+3. **Whoever owns the degree type owns the display.** Savant shows third-party
+   HVAC in the *device's* advertised scale (the `deg C/F` it reports), not the
+   app's units toggle — so to get Fahrenheit tiles, the bridge has to advertise
+   Fahrenheit and speak the driver's Fahrenheit status format (which, charmingly,
+   round-trips each temperature through a hex/`%03X` step — get the encoding
+   wrong and a room reads 30° low). The bridge converts at the boundary so the
+   units stay Fahrenheit-native while Savant gets exactly the form it parses.
+
+Once those lined up, the tiles came alive: room temperature, setpoint, mode,
+and fan, in Fahrenheit — native, local, no cloud. Reading worked perfectly.
+
+## The bug that hid behind a green check
+
+Reading was solid; *writing* was a mess. Buttons worked intermittently — a tap
+would sometimes take, sometimes not — and the setpoint dial was worse: drag it
+and the number snapped to 88 and stuck there. Everything I tried to verify it
+told me it was fine, which is the most dangerous kind of bug.
+
+The reason my checks lied is worth dwelling on. I was verifying the way most
+people do: send a command, read the value back, see it changed, call it done.
+But the value I was reading back was the bridge's *optimistic echo* — it updated
+its own cache the instant a command arrived, before the unit had confirmed
+anything. So the check passed at t+0 and then, a few seconds later, a background
+poll quietly overwrote it. **Point-in-time verification can't catch a
+persistence bug.** You have to wait — through a poll cycle, through the
+controller's own status refresh — and look again.
+
+When I did, two separate root causes fell out.
+
+**The dial: one number, two scales.** Savant's CoolMaster profile doesn't send
+setpoints in a single unit. The single-setpoint dial sends *Celsius* (`temp
+L1.101 23`); the auto-mode control sends *Fahrenheit* (`temp L1.101 75`); the
++/- buttons send a *relative* nudge (`temp L1.101 +1`). My bridge treated every
+one of them as Celsius and converted to Fahrenheit — so a perfectly reasonable
+75 °F became 167 °F, got clamped to the unit's 88 °F ceiling, and lodged there.
+That's the stuck "88."
+
+The fix is the kind that feels obvious in hindsight: a valid Celsius setpoint
+(6–33) and a valid Fahrenheit one (61–88) can never be confused, because the
+ranges don't overlap. So the bridge looks at the *value* — below ~50 it's
+Celsius, above it's Fahrenheit — and a leading `+`/`-` means relative. No
+guessing about Savant's mood, no mode to track; the number tells you what it is.
+
+**The buttons: a race nobody was refereeing.** Savant polls status every few
+seconds, and right after any command it fires a second targeted read. Meanwhile
+the bridge ran its own background poll. Three readers, one cache, no ordering —
+so a poll that started *before* your command but finished *after* it would
+happily write the old value back over your new one. Intermittent by nature:
+whether your command survived depended on exactly when the next poll landed.
+
+Fixing that meant giving the cache some discipline:
+
+- a **per-unit lock** so a command's write-and-confirm and a background poll
+  can never touch the same unit at the same time;
+- a **pending overlay** that pins a just-commanded value as the unit's
+  displayed state until a real read *confirms* it (or a short deadline lapses) —
+  a stale read can no longer revert your intent;
+- a **cooldown** so the poller leaves a unit alone for a few seconds after a
+  command, instead of racing the write while it's still settling.
+
+## Trust, but verify (over time)
+
+The thing that actually got this shipped wasn't any single fix — it was
+refusing to believe a green check until it earned it. I wrote a self-test that
+commands each unit and then re-checks the value at t+2 s, t+13 s (past a poll
+cycle), and t+35 s (past Savant's status refresh), on all three surfaces that
+matter: the unit's own HTTP API, the bridge's status output, and what Savant's
+app actually displays. It sweeps every setpoint from 61 to 88, fires four
+commands at once to recreate the race, and watches a unit sit idle for a minute
+to make sure nothing flaps on its own.
+
+```
+$ cc-selftest
+-- setpoint L1.101 -> 76F (persistence) --
+   [PASS] t+2s  unit setpoint == 76
+   [PASS] t+13s bridge status == 76 after a poll cycle
+   [PASS] t+35s app shows == 76
+   [PASS] no revert after reaching 76 during settle
+...
+ALL GREEN: 62/62 checks passed
+```
+
+Sixty-two checks, green twice in a row — including every setpoint that used to
+collapse to 88. *That's* two-way control I trust: native Fahrenheit tiles, every
+button and the dial holding their value through the polls, local and cloud-free.
+
+## You don't need Savant
+
+Savant is *my* front end, but it's only one adapter. The point of this project
+is local control of the hardware; how you surface it is up to you:
+
+- **Raw HTTP / the `cc` CLI** — works the moment the modules are on your
+  network. `cc status`, `cc set …`, `cc monitor`. No broker, no hub, no account.
+- **Home Assistant / MQTT** — the ProtoART modules are MQTT clients with Home
+  Assistant auto-discovery built in. Point them at your broker and the
+  thermostats appear in HA with **no bridge at all**.
+- **CoolMasterNet bridge** — for Savant (and anything else that already speaks
+  CoolMasterNet). The bridge isn't Savant-specific; it emulates a gateway those
+  systems already understand.
+
+The repo reflects that: a small, dependency-free core library, a CLI, and the
+bridge as an *optional* adapter. Clone it, drop in your units, pick your front
+end.
+
+## Where this leaves us
+
+Four mini-splits I can read and command entirely on the LAN, a tested library
+and CLI, native Savant tiles with two-way control, and a path for anyone who
+doesn't run Savant. No cloud account, no app, no internet dependency — exactly
+the local-first setup I went looking for in Part 1.
+
+Loose ends:
+
+- **The fourth head** spent a while off the network on a weak Wi-Fi link;
+  power-cycling it brings it back as `L1.103`.
+- **Push instead of poll.** The modules speak MQTT; moving from polling to
+  event-driven state is the obvious next upgrade.
+
+The code — library, CLI, bridge, and the reverse-engineered API notes — is in
+the `minisplit-local` repo.
