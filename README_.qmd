@@ -1,214 +1,56 @@
 ---
-title: "README.qmd"
+title: "Docs"
+pagetitle: "Docs"
 format:
   html:
     toc: true
 ---
 
-### Diligent Services Quarto Project
+## This website is open source
 
-This is the source for **diligentservices.io**, a static site built with [Quarto](https://quarto.org/). It is designed to be **hand-maintained**: every page is plain Markdown, and a step-by-step, non-technical guide lives in **[EDITING.md](EDITING.md)** — how to edit pages, change the menu / footer / contact details, recolor the site, add a blog post, publish, and roll back.
+The full source for **diligentservices.io** lives in a public repository on GitHub:
+
+**[github.com/samstevenm/diligentservices-quarto](https://github.com/samstevenm/diligentservices-quarto)**
+
+Every page, color, and word you see is in there. The site is built with [Quarto](https://quarto.org/) and is meant to be hand-maintained: each page is plain Markdown, and a non-technical, step-by-step guide lives in **[EDITING.md](https://github.com/samstevenm/diligentservices-quarto/blob/main/EDITING.md)**.
+
+## Why we publish the source
+
+We point to the repo because we try to be as transparent as possible in everything we build, from websites, to construction projects, to business strategies. This page describes exactly what the repository is and what it contains, so anyone can read the source, check our work, or learn from how the site is put together.
+
+For a note on how the site and our apps are written, see [How this site is made](g611/index.qmd).
 
 ## What's changed (2026-06-25 refresh)
 
-A light refresh focused on honest, generic, easy-to-maintain content:
+- Repositioned from "general contractor / remodeler" to **lighting & control integration** for high-end residential and commercial spaces.
+- A light, clean theme (warm cream, one brass accent) with a documented stylesheet.
+- Every page is plain Markdown, with no client names or project specifics.
+- A non-technical editing guide and safe, rollback-able deploy tooling.
+- A legal-entity footer and a live `/support` page.
+- One canonical AI-authorship colophon at `/g611/`, linked in the footer.
+- The Mitsubishi mini-split blog series links its open-source code at [minisplit-local-public](https://github.com/samstevenm/minisplit-local-public).
 
-- **Repositioned** from "general contractor / remodeler" to **lighting & control integration** for high-end residential and commercial spaces.
-- **Light, clean theme** (warm cream + one brass accent, `cosmo` base) replacing the old construction-orange look. Colors are documented, named variables at the top of `styles/custom.scss`.
-- **Every page is plain Markdown** now — no custom HTML — so anyone can hand-edit the words.
-- **No client names or project specifics** anywhere; capability copy is generic.
-- **New editing guide** (`EDITING.md`) and **safe deploy tooling**: `publish.sh` backs up the live site and auto-rolls-back on failure; `rollback.sh` reverts to any prior version.
-- **Legal-entity footer** ("Diligent Services is a DBA of Carmelita Enterprises Inc.") plus a live `/support` page, for Apple Developer compliance.
-- **One canonical AI-authorship colophon** at `/g611/`, linked site-wide in the footer.
-- **Blog:** the Mitsubishi mini-split Part 2 post now links its open-source code at **[minisplit-local-public](https://github.com/samstevenm/minisplit-local-public)** (MIT, standard-library Python).
-
-## Project Structure
+## Project structure
 
 - `_quarto.yml`: site config (nav, footer, theme, fonts).
 - `index.qmd`, `services.qmd`, `about.qmd`, `contact.qmd`: the main pages.
 - `support/index.qmd`: the public support page.
-- `g611/index.qmd`: the AI-authorship colophon (linked in the footer); `_g611.qmd` is a short include that points at it.
+- `g611/index.qmd`: the AI-authorship colophon (linked in the footer).
 - `blog/*`: blog posts.
 - `styles/custom.scss`: theme colors and fonts (documented, named variables at the top).
-- `EDITING.md`: **start here to update the site by hand.**
+- `EDITING.md`: start here to update the site by hand.
 - `publish.sh` / `rollback.sh`: safe, rollback-able deploy scripts (run on the server).
 - `images/`: favicons and image assets.
-- `_site/`: generated output (git-ignored).
-- `cloud-config.yaml`: cloud-init for initial server setup.
-- `README_.qmd`: this file (symlinked to `README.md`).
+- `README_.qmd`: this page (symlinked to `README.md`).
 
-## Attribution
+## Updating the site
 
-This site was created using [Quarto](https://quarto.org/), an open-source scientific and technical publishing system developed and maintained by RStudio, PBC and the open-source community. 
+To change the site, edit the plain-Markdown pages and follow the step-by-step guide in **[EDITING.md](https://github.com/samstevenm/diligentservices-quarto/blob/main/EDITING.md)**. Publishing and rolling back are one-command scripts on the server (`publish.sh` and `rollback.sh`); every published version is a git commit, so a previous version can always be put back.
 
-Learn more about Quarto at [quarto.org](https://quarto.org/).
+## Hosting
 
-## License
+The site is hosted on a [Hetzner](https://www.hetzner.com/) instance, with the domain managed by Namecheap and a Let's Encrypt certificate. Neither Hetzner nor Namecheap is a paid sponsor; we just like their products.
 
-This project is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) license. You are free to copy, modify, and distribute this work, provided you give appropriate credit.
+## Attribution and license
 
-Learn more about the license at [creativecommons.org/licenses/by/4.0](https://creativecommons.org/licenses/by/4.0/).
-
-### Hosting and Domain
-
-This site is hosted on a basic Hetnzer instance, and the domain is managed by Namecheap. Neither Hetnzer nor Namecheap are paid sponsors, but I really like their product.
-
-### Transparency and Readme
-
-This README describes exactly what this repository is and what it contains. The site points to the repo in an effort to be as transparent as possible in everything we build, from websites, to construction projects, to business strategies. The `README_.qmd` file is symbolically linked to `README.qmd` to keep them synced.
-
-## Setup and Deployment
-
-### Prerequisites
-
-- Install [Quarto](https://quarto.org/docs/get-started/installation.html)
-- Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-
-### Initial Server Setup
-
-1. **Generate SSH Key** (if you don't have one):
-
-    ```bash
-    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-    ```
-
-2. **Add SSH Key to SSH Agent**:
-
-    ```bash
-    eval "$(ssh-agent -s)"
-    ssh-add ~/.ssh/ssgh.pem
-    ```
-
-3. **Set Correct Permissions**:
-
-    ```bash
-    chmod 600 ~/.ssh/ssgh.pem
-    ```
-
-4. **Add SSH Key to GitHub**:
-
-    ```bash
-    cat ~/.ssh/ssgh.pem.pub
-    ```
-
-    - Copy the output and add it to your GitHub account under [SSH and GPG keys](https://github.com/settings/keys).
-
-5. **Verify SSH Connection to GitHub**:
-
-    ```bash
-    ssh -i ~/.ssh/ssgh.pem -T git@github.com
-    ```
-
-    You should see a message like:
-
-    ```
-    Hi <USERNAME>! You've successfully authenticated, but GitHub does not provide shell access.
-    ```
-
-6. **Configure SSH to Use the Specific Key**:
-
-    ```bash
-    vim ~/.ssh/config
-    ```
-
-    Add the following configuration:
-
-    ```plaintext
-    Host github.com
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/ssgh.pem
-    ```
-
-    Save and exit the file (`:wq` *w*rites, then *q*uits vim. you heard it here again).
-
-7. **Clone the Repository on the Server**:
-
-    ```bash
-    cd /var/www/<SITENAME>
-    git clone git@github.com:<USERNAME>/<REPONAME>.git
-    ```
-
-8. **Obtain SSL Certificates**:
-
-    ```bash
-    sudo certbot certonly --webroot -w /var/www/<SITENAME>/<REPONAME>/_site -d <SITENAME.TLD> -d www.<SITENAME.TLD>
-    ```
-
-## Local Development
-
-9. **Clone the Repository Locally**:
-
-    ```bash
-    git clone git@github.com:<USERNAME>/<REPONAME>.git
-    cd <REPONAME>
-    ```
-
-10. **Edit Content and Styles**:
-
-    - Edit `.qmd` files to change content.
-    - Edit `styles/custom.scss` for custom styles.
-    - Add images to the `images/` directory.
-
-11. **Generate the Site Locally**:
-
-    ```bash
-    quarto render
-    ```
-
-12. **Commit and Push Changes to GitHub**:
-
-    ```bash
-    git add .
-    git commit -m "Updated content and styles"
-    git push origin main
-    ```
-
-## Updating the Site on the Server (publish + roll back)
-
-The live site does **not** update automatically. To publish, SSH into the server and run the safe publish script:
-
-```bash
-cd /var/www/diligentservices/diligentservices-quarto
-git pull
-./publish.sh
-```
-
-`publish.sh` backs up the current live site, pulls, activates the Python venv (required, or the computational blog posts fail to build), renders, and **automatically restores the previous version if anything fails** — so the live site is never left half-broken. It prints the previous commit so you can roll back. nginx serves the rendered `_site/` directly; no reload needed.
-
-To **roll back** to a previous version (every published version is just a git commit, so nothing is ever lost):
-
-```bash
-./rollback.sh <commit>              # e.g. ./rollback.sh dc8e93d  (find commits with: git log --oneline)
-git checkout main && ./publish.sh   # return to the latest when you're ready
-```
-
-See **[EDITING.md](EDITING.md)** for the full, non-technical walkthrough of editing and publishing.
-
-## Nginx Folder Structure
-
-- `/etc/nginx/nginx.conf`: Main Nginx configuration file.
-- `/etc/nginx/sites-available/<SITENAME>`: Site-specific Nginx configuration file.
-- `/etc/nginx/sites-enabled/<SITENAME>`: Symlink to the site-specific configuration file.
-- `/var/www/<SITENAME>/`: Directory containing the website files.
-- `/var/www/<SITENAME>/<REPONAME>/_site/`: Directory containing the generated site files.
-
-## GitHub Folder Structure
-
-- `<REPONAME>/`: Root directory of the Quarto project.
-- `<REPONAME>/_quarto.yml`: Quarto configuration file.
-- `<REPONAME>/index.qmd`: Main page content.
-- `<REPONAME>/about.qmd`: About page content.
-- `<REPONAME>/contact.qmd`: Contact page content.
-- `<REPONAME>/styles/custom.scss`: Custom CSS styles.
-- `<REPONAME>/images/logo.png`: Company logo image.
-- `<REPONAME>/_site/`: Generated site files.
-- `<REPONAME>/.gitignore`: Git ignore file.
-- `<REPONAME>/cloud-config.yaml`: Cloud-init script.
-- `<REPONAME>/README.qmd`: This meta explanation file.
-
-### Customization
-
-- Edit `.qmd` files to change content.
-- Edit `styles/custom.scss` for custom styles.
-- Add images to the `images/` directory.
+Built with [Quarto](https://quarto.org/), an open-source publishing system. This project is licensed under [Creative Commons Attribution 4.0 (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/): you are free to copy, modify, and distribute it with appropriate credit.

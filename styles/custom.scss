@@ -11,8 +11,8 @@
 $ds-cream:   #FBF9F4;  // page background (warm off-white)
 $ds-ink:     #23201A;  // body + heading text (warm near-black)
 $ds-muted:   #6B655B;  // secondary / lighter text
-$ds-brass:   #9A6B1E;  // the one warm accent (buttons, active nav, rules)
-$ds-link:    #7E5615;  // link text (a touch darker so it stays readable)
+$ds-brass:   #9A6B1E;  // warm accent (active nav, rules)
+$ds-link:    #7E5615;  // links + buttons (darker brass, clears WCAG AA)
 $ds-hair:    #E7E1D6;  // hairlines / borders
 
 // Map our palette onto the theme. Usually no need to touch these.
@@ -26,11 +26,14 @@ $border-color:     $ds-hair;
 $navbar-bg: $ds-cream;
 $navbar-fg: $ds-ink;
 $navbar-hl: $ds-brass;
-$footer-bg: #F3EFE7;
+$footer-bg: #EFEAE0;   // a touch deeper than the page so the footer separates
 $footer-fg: $ds-muted;
 
 $font-family-sans-serif: 'Inter', system-ui, -apple-system, "Segoe UI", sans-serif;
-$headings-font-family:   'Fraunces', Georgia, "Times New Roman", serif;
+// Display serif. NOTE: avoid "ff"/"fi"/"fl" inside headings — some serifs fuse
+// them into an ugly ligature. Ligatures are turned off on headings below as a
+// safety net, but it is still cleaner to pick heading words without f-pairs.
+$headings-font-family:   'Spectral', Georgia, "Times New Roman", serif;
 $headings-font-weight:   600;
 $headings-color:         $ds-ink;
 $body-line-height:       1.65;
@@ -38,14 +41,32 @@ $body-line-height:       1.65;
 /*-- scss:rules --*/
 
 body { -webkit-font-smoothing: antialiased; }
-h1, h2, h3 { letter-spacing: -0.01em; }
+
+// Headings: ligatures off so f-pairs never fuse, and gentle tracking for the serif.
+h1, h2, h3, h4, h5, h6, .quarto-title-block .title, .navbar-brand {
+  font-variant-ligatures: no-common-ligatures no-discretionary-ligatures;
+  font-feature-settings: "liga" 0, "dlig" 0, "calt" 0;
+}
 
 // Make the homepage title (front-matter "title:") read as a hero.
-.quarto-title-block .title { font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.08; }
+.quarto-title-block .title {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+}
 .quarto-title-block .subtitle { color: $ds-muted; font-weight: 400; }
 
 .navbar { border-bottom: 1px solid $ds-hair; }
 .navbar-brand { font-family: $headings-font-family; font-weight: 600; }
 
-// A little breathing room between stacked buttons on the homepage.
+// Footer: a defined top edge so it separates from the page.
+.nav-footer { border-top: 1px solid $ds-hair; }
+
+// Buttons. Primary uses the darker brass so the white label clears WCAG AA.
 .btn { margin: 0.25rem 0.4rem 0.25rem 0; }
+.btn-primary { background-color: $ds-link; border-color: $ds-link; }
+.btn-primary:hover { background-color: darken($ds-link, 6%); border-color: darken($ds-link, 6%); }
+
+// Secondary CTA: brass-toned outline instead of stock Bootstrap gray.
+.btn-outline-secondary { color: $ds-link; border-color: $ds-hair; }
+.btn-outline-secondary:hover { background-color: $ds-cream; border-color: $ds-brass; color: $ds-brass; }

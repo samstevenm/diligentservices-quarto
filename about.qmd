@@ -10,7 +10,7 @@ toc: true
 
 ---
 
-Diligent Services is a family-run lighting and control integration firm (_[CSLB 1132892](https://www.cslb.ca.gov/OnlineServices/checklicenseII/LicenseDetail.aspx?LicNum=1132892)_) serving high-end residential and commercial clients. Founded in 2002 by Tony and Barbara Myers in the SF Bay Area, the operation is now run by Sam and Pearl Myers. We design, install, and program lighting, audio/visual, control, and networking - the quiet infrastructure that makes a home or a commercial space feel effortless. We thrive on referral business.
+Diligent Services is a family-run lighting and control integration firm (_[CSLB 1132892](https://www.cslb.ca.gov/OnlineServices/checklicenseII/LicenseDetail.aspx?LicNum=1132892)_) serving high-end residential and commercial clients. Founded in 2002 by Tony and Barbara Myers in the SF Bay Area, the operation is now run by Sam and Pearl Myers. We design, install, and program lighting, audio/visual, control, and networking, the quiet infrastructure a home or commercial space depends on. Most of our work comes by referral.
 
 ### Personal Touch
 

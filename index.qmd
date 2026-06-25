@@ -1,11 +1,11 @@
 ---
-title: "Light. Control. Effortless."
-subtitle: "Lighting and control integration for high-end homes and commercial spaces."
+title: "Lighting and control, done right."
+subtitle: "Design, installation, and programming for high-end homes and commercial spaces."
 pagetitle: "Diligent Services — Lighting & Control Integration"
 toc: false
 ---
 
-Diligent Services designs, installs, and programs the lighting, audio/visual, control, and networking systems that make a space feel effortless. We are a small, family-run firm, and we carry a project from design through programming and the support that follows, so the technology stays out of the way.
+Diligent Services designs, installs, and programs the lighting, audio/visual, control, and networking that a high-end home or commercial space runs on. We are a small, family-run firm, and we carry a project from design through programming and the support that follows, so the technology stays out of the way.
 
 [Start a project](contact.qmd){.btn .btn-primary} [See our services](services.qmd){.btn .btn-outline-secondary}
 
