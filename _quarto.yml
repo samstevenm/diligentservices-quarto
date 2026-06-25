@@ -10,6 +10,8 @@ website:
   repo-url: https://github.com/samstevenm/diligentservices-quarto/
   repo-actions: [issue]
   favicon: images/favicon.ico
+  page-footer:
+    center: "Diligent Services is a DBA of Carmelita Enterprises Inc."
   navbar:
     left:
       - text: "Home"
