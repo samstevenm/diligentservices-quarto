@@ -1,0 +1,14 @@
+---
+title: "A note on how this is made (G611)"
+format:
+  html:
+    toc: false
+---
+
+I lean on AI coding agents to build a lot of this. The site, and the apps it supports, are mostly written by an agent that I prompt, steer, and review. The ideas, the testing, the decisions, and the final call are mine.
+
+That's how I read Galatians 6:11: "Ye see how large a letter I have written unto you with mine own hand." Paul dictated most of his letters, then added a few words in his own hand so you knew he stood behind them. Same idea here. I use the tools, do my own diligence, and put my name on the result.
+
+After I started writing notes like this one, I read a thoughtful piece aptly titled [AI Slop, Suspicion, and Writing Back](https://benjamincongdon.me/blog/2025/01/25/AI-Slop-Suspicion-and-Writing-Back/), which gives a much more nuanced take on this whole question and was valuable to me as I figure out where I stand.
+
+Sam Myers

@@ -316,5 +316,5 @@ I'm reminded of Galatians 6:11: “Ye see how large a letter I have written unto
 After I wrote this, but before publishing, I read a thoughtful piece aptly titled [AI Slop, Suspicion, and Writing Back](https://benjamincongdon.me/blog/2025/01/25/AI-Slop-Suspicion-and-Writing-Back/) on AI writing which provides a much more nuanced take on this complex issue, and was valuable to me as I figure out where I stand.
 
 > **Standard Disclaimer**  
-This post is a mix of human and AI effort (G611). While I’ve reviewed and finalized the content, some parts reflect AI-generated input. Always do your own due diligence and consult professionals when needed.  
+This post is a mix of human and AI effort [(G611)](/g611/). While I’ve reviewed and finalized the content, some parts reflect AI-generated input. Always do your own due diligence and consult professionals when needed.  
 

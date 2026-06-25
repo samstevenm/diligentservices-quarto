@@ -2,7 +2,7 @@
 title: "Setting Up Proxmox VE with Windows 10 Guest VM and DHCP Networking"
 description: "A step-by-step guide to setting up Proxmox VE on a mini PC, enabling DHCP networking with Tailscale, and preparing for guest OS installations."
 author: "Sam M"
-date: "2024-01-08"
+date: "2025-01-08"
 categories: 
   - Networking
   - VM
@@ -244,4 +244,4 @@ Organize credentials with relevant tags for easy retrieval.
 With Proxmox VE configured for DHCP networking and Tailscale integration, you have a stable base OS ready for hosting VMs and containers. This setup allows remote management and adaptability to any network, ensuring reliability and flexibility for your virtualized workloads.
 
 > **Standard Disclaimer**  
-This post is a mix of human and AI effort [(G611)](/blog/Selective-Mac-to-Mac-Migration-Using-rsync.qmd#author’s-note). While I’ve reviewed and finalized the content, some parts reflect AI-generated input. Always do your own due diligence and consult professionals when needed.  
+This post is a mix of human and AI effort [(G611)](/g611/). While I’ve reviewed and finalized the content, some parts reflect AI-generated input. Always do your own due diligence and consult professionals when needed.  
