@@ -1,21 +1,24 @@
 ---
 title: "About Us"
+pagetitle: "About — Diligent Services"
 about:
   template: marquee
-format:
-  html:
-    toc: true
+toc: true
 ---
 
 ### Diligent Services
 
 ---
 
-Diligent Services is a full-service General Contracting (_[CSLB 1132892](https://www.cslb.ca.gov/OnlineServices/checklicenseII/LicenseDetail.aspx?LicNum=1132892)_) and Consulting firm. Founded in 2002 by Tony Myers in the SF Bay Area, the operation has since moved to the Greater Los Angeles area. DSI specializes in interior remodeling, revamping existing spaces like kitchens and bathrooms, and has recently been focused on developing bespoke solutions for custom technology and integration needs. We thrive on referral business.
+Diligent Services is a family-run systems integrator based in the Greater Los Angeles area. We design, program, and maintain the lighting, audio/visual, and control systems behind high-end Southern California homes.
+
+What began as a family general-contracting and remodeling business (licensed in California, _[CSLB 1132892](https://www.cslb.ca.gov/OnlineServices/checklicenseII/LicenseDetail.aspx?LicNum=1132892)_) has grown into an integration practice. That trade background is the point of difference: our systems are specified to work with the house - its wiring, its structure, its finishes - instead of being added on afterward.
 
 ### Personal Touch
 
 Diligent Services is a family operation founded by Tony and Barbara Myers, and actively supported by the immediate and extended Myers Family. Much of the (large) Myers family lives in the Los Angeles area - family get-togethers often turn into family projects and vice versa. The name Diligent Services was chosen carefully, as we strive to follow Colossians 3:23: "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters."
+
+We stand behind our systems long after the install crew leaves, because in this work, support is the product.
 
 ---
 

@@ -1,15 +1,15 @@
 ---
 title: "Contact Us"
-format:
-  html:
-    toc: true
+pagetitle: "Contact — Diligent Services"
+toc: false
 ---
 
+### Let's design something quietly extraordinary.
 
-### Contact Us
+Planning a new home, a remodel, or an upgrade to the systems you already live with? Tell us about the space and how you want to live in it, and we'll take it from there.
 
-Ready to transform your space or incorporate smart home technology? Contact Diligent Services today to discuss your project and discover how we can help you achieve your vision.
+- **Email:** [info@diligentservices.io](mailto:info@diligentservices.io)
+- **Phone:** (424) 448-5200
+- **Service area:** Greater Los Angeles Area, CA
 
-- **Email**: info@diligentservices.io
-- **Phone**: (424) 448-5200
-- **Address:** Greater Los Angeles Area, CA
+Already a client and need a hand? Head to [Support](support/index.qmd).

@@ -1,29 +1,86 @@
 ---
-title: "Welcome to Diligent Services"
-format:
-  html:
-    toc: true
+pagetitle: "Diligent Services — Lighting & Control Integration"
+description: "Lighting, control, and entertainment systems for Southern California's finest homes, designed and programmed and maintained by one accountable team."
+page-layout: full
+toc: false
+anchor-sections: false
 ---
-### Our Services
 
-- **Interior Remodeling:** Transforming kitchens, bathrooms, and living spaces to enhance functionality and aesthetics.
-- **Smart Home Technology:** Integrating modern smart home systems for convenience, security, and energy efficiency.
-- **Custom Projects:** Tailoring solutions to meet unique client needs and preferences, ensuring high satisfaction.
-- **Luxury AV Services:** Providing high-end audio-visual solutions to elevate your home entertainment experience.
-- **Home Automation Systems:** Implementing cutting-edge technology to automate and control various aspects of your home.
-- **Commercial Construction:** Managing and executing commercial construction and renovation projects with a focus on quality and efficiency.
-- **Technical Consulting:** Delivering expert advice on complex technical issues to enhance user experience and project outcomes.
+::: {.hero}
+[Lighting & Control Integration · Southern California]{.hero-eyebrow}
 
-### Why Choose Us
+[Light. Control.<br>Effortless living.]{.hero-title}
 
-- **Experience and Expertise:** Over 20 years of experience in general contracting and a deep understanding of modern construction and renovation techniques.
-- **Family Values:** A family-operated business with a commitment to integrity, trust, and exceptional service.
-- **Client-Centered Approach:** We prioritize our clients' needs and preferences, providing personalized solutions and attentive service.
+[Diligent Services designs, programs, and maintains the lighting, control, and entertainment systems that make Southern California's finest homes feel effortless. One accountable team, from design through the years of support that follow.]{.hero-sub}
 
-### Our Mission
+[Request a consultation](contact.qmd){.btn-cta} [See what we do](services.qmd){.btn-ghost}
+:::
 
-At Diligent Services, our mission is to deliver top-quality construction, renovation, and consulting services with a focus on excellence, integrity, and customer satisfaction. We aim to create spaces that are not only beautiful but also functional and reflective of our clients' lifestyles and values.
+<hr class="rule">
 
-### Blog
+::: {.section}
+[What we do]{.section-kicker}
 
-Check out our blog for updates on the latest trends in construction, smart home technology, and luxury AV services. Or, more likely, sporadic posts on whatever Sam finds interesting.
+[We don't sell boxes. We design systems: specified, programmed, and documented so the technology serves the home instead of the other way around.]{.section-lead}
+
+::: {.pillars}
+::: {.pillar}
+[01]{.ix}
+
+### Lighting & Tunable Light
+
+Layered scenes, motorized shades, and warm-to-cool tuning that shifts with the day. Lighting designed to read as architecture rather than gadgetry.
+:::
+::: {.pillar}
+[02]{.ix}
+
+### Audio / Visual
+
+Reference-grade media rooms, distributed audio, and theaters tuned to the room they live in.
+:::
+::: {.pillar}
+[03]{.ix}
+
+### Control & Automation
+
+One calm interface that unifies lighting, climate, shades, AV, and security. Simple enough for everyone in the house to use.
+:::
+::: {.pillar}
+[04]{.ix}
+
+### Networking & Infrastructure
+
+Enterprise-grade Wi-Fi, structured wiring, and the quiet, reliable backbone every connected home actually runs on.
+:::
+:::
+:::
+
+<hr class="rule">
+
+::: {.section}
+[Why Diligent Services]{.section-kicker}
+
+::: {.why}
+::: {.tile}
+### One accountable team
+
+Design, programming, installation, and support under one roof, so nothing falls between trades.
+:::
+::: {.tile}
+### Built to be serviced
+
+Every system labeled, documented, and supportable. When something needs attention, we answer.
+:::
+::: {.tile}
+### We put our name on it
+
+A family operation that stands behind the work. Licensed in California, and around long after the install crew leaves.
+:::
+:::
+:::
+
+::: {.closing}
+## Let's design something quietly extraordinary.
+
+[Request a consultation](contact.qmd){.btn-cta}
+:::
