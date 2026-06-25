@@ -43,7 +43,7 @@ website:
 format:
   html:
     theme:
-      - darkly
+      - cosmo
       - styles/custom.scss
     toc: true
     include-in-header:

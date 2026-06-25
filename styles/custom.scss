@@ -1,216 +1,51 @@
 /*-- scss:defaults --*/
 
-// ── Diligent Services — "quiet luxury" palette ───────────────────
-// Premium comes from restraint and whitespace, not effects.
-$ds-ink:     #0E0F12;   // deepest canvas
-$ds-ink-2:   #14161A;   // raised panels / alternate sections
-$ds-paper:   #F4F1EA;   // warm off-white text (not pure white)
-$ds-muted:   #B9B5AC;   // secondary text
-$ds-brass:   #C9A24B;   // the single warm metallic accent (kept under ~5% of any view)
-$ds-brass-2: #D9B868;   // brass hover / active
-$ds-hair:    rgba(244, 241, 234, 0.12);
+// ───────────────────────────────────────────────────────────────
+// Diligent Services — light & clean theme.
+// To retune the look, change the values below. That's all most edits need.
+//   - Colors are hex codes (the # values). Pick new ones and re-render.
+//   - Fonts are Google Font names; to change them also update the <link>
+//     in _quarto.yml (see EDITING.md).
+// ───────────────────────────────────────────────────────────────
 
-// ── Bootstrap / Quarto variable overrides ───────────────────────
-$body-bg:          $ds-ink;
-$body-color:       $ds-paper;
+$ds-cream:   #FBF9F4;  // page background (warm off-white)
+$ds-ink:     #23201A;  // body + heading text (warm near-black)
+$ds-muted:   #6B655B;  // secondary / lighter text
+$ds-brass:   #9A6B1E;  // the one warm accent (buttons, active nav, rules)
+$ds-link:    #7E5615;  // link text (a touch darker so it stays readable)
+$ds-hair:    #E7E1D6;  // hairlines / borders
+
+// Map our palette onto the theme. Usually no need to touch these.
+$body-bg:          $ds-cream;
+$body-color:       $ds-ink;
 $primary:          $ds-brass;
-$link-color:       $ds-brass;
-$link-hover-color: $ds-brass-2;
+$link-color:       $ds-link;
+$link-hover-color: $ds-brass;
 $border-color:     $ds-hair;
 
-$navbar-bg: $ds-ink;
-$navbar-fg: $ds-paper;
+$navbar-bg: $ds-cream;
+$navbar-fg: $ds-ink;
 $navbar-hl: $ds-brass;
-
-$footer-bg: #0B0C0E;
+$footer-bg: #F3EFE7;
 $footer-fg: $ds-muted;
 
-// ── Typography: editorial serif display + clean grotesque body ──
-$font-family-sans-serif: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$font-family-sans-serif: 'Inter', system-ui, -apple-system, "Segoe UI", sans-serif;
 $headings-font-family:   'Fraunces', Georgia, "Times New Roman", serif;
 $headings-font-weight:   600;
-$headings-color:         $ds-paper;
+$headings-color:         $ds-ink;
 $body-line-height:       1.65;
-
-$h1-font-size: 2.6rem;
-$h2-font-size: 1.9rem;
-$h3-font-size: 1.3rem;
-$h4-font-size: 1.1rem;
 
 /*-- scss:rules --*/
 
-body {
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
+body { -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { letter-spacing: -0.01em; }
 
-h1, h2, h3 { letter-spacing: -0.01em; line-height: 1.15; }
+// Make the homepage title (front-matter "title:") read as a hero.
+.quarto-title-block .title { font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.08; }
+.quarto-title-block .subtitle { color: $ds-muted; font-weight: 400; }
 
-a { text-decoration: none; }
-a:hover { color: $ds-brass-2; }
-
-// ── Buttons ─────────────────────────────────────────────────────
-.btn-cta, .btn-ghost {
-  display: inline-block;
-  font-family: $font-family-sans-serif;
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-  padding: 0.85rem 1.7rem;
-  border-radius: 2px;
-  transition: all 0.25s ease;
-  margin: 0.35rem 0.55rem 0.35rem 0;
-}
-.btn-cta {
-  background: $ds-brass;
-  color: $ds-ink !important;
-  border: 1px solid $ds-brass;
-}
-.btn-cta:hover { background: $ds-brass-2; border-color: $ds-brass-2; color: $ds-ink !important; }
-.btn-ghost {
-  background: transparent;
-  color: $ds-paper !important;
-  border: 1px solid $ds-hair;
-}
-.btn-ghost:hover { border-color: $ds-brass; color: $ds-brass !important; }
-
-// ── Hero ────────────────────────────────────────────────────────
-.hero {
-  text-align: center;
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 6rem 1.5rem 4.5rem;
-}
-.hero-eyebrow {
-  display: block;
-  font-family: $font-family-sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  font-size: 0.72rem;
-  color: $ds-brass;
-  margin-bottom: 1.6rem;
-}
-.hero-title {
-  display: block;
-  font-family: $headings-font-family;
-  font-weight: 500;
-  font-size: clamp(2.6rem, 6vw, 4.4rem);
-  line-height: 1.04;
-  color: $ds-paper;
-  margin: 0 0 1.5rem;
-}
-.hero-sub {
-  display: block;
-  font-size: 1.15rem;
-  line-height: 1.6;
-  color: $ds-muted;
-  max-width: 620px;
-  margin: 0 auto 2.4rem;
-}
-
-// ── Section frame ───────────────────────────────────────────────
-.section {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 4rem 1.5rem;
-}
-.section-kicker {
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  font-size: 0.72rem;
-  color: $ds-brass;
-  font-family: $font-family-sans-serif;
-  margin-bottom: 0.9rem;
-}
-.section-lead {
-  display: block;
-  font-family: $headings-font-family;
-  font-weight: 400;
-  font-size: clamp(1.55rem, 3vw, 2.15rem);
-  color: $ds-paper;
-  max-width: 760px;
-  margin: 0 0 2.6rem;
-  line-height: 1.25;
-}
-hr.rule { height: 1px; background: $ds-hair; border: 0; margin: 0; opacity: 1; }
-
-// ── Capability tiles ────────────────────────────────────────────
-.pillars, .why {
-  display: grid;
-  gap: 1.4rem;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-}
-.pillar, .tile {
-  background: $ds-ink-2;
-  border: 1px solid $ds-hair;
-  border-radius: 3px;
-  padding: 1.8rem 1.6rem;
-}
-.pillar h3, .tile h3 { font-size: 1.18rem; margin: 0 0 0.6rem; color: $ds-paper; }
-.pillar p, .tile p { color: $ds-muted; font-size: 0.97rem; margin: 0; }
-.pillar .ix {
-  display: block;
-  color: $ds-brass;
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
-  margin-bottom: 0.9rem;
-  font-family: $font-family-sans-serif;
-}
-
-// ── Selected work band ──────────────────────────────────────────
-.work {
-  display: grid;
-  gap: 1.4rem;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-.work-card {
-  background: $ds-ink-2;
-  border: 1px solid $ds-hair;
-  border-radius: 3px;
-  padding: 1.8rem 1.6rem;
-}
-.work-card .cat {
-  display: block;
-  color: $ds-brass;
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  font-family: $font-family-sans-serif;
-  margin-bottom: 0.9rem;
-}
-.work-card h3 { font-size: 1.12rem; margin: 0 0 0.6rem; color: $ds-paper; }
-.work-card p { color: $ds-muted; font-size: 0.96rem; margin: 0; }
-.work-note {
-  display: block;
-  color: $ds-muted;
-  font-size: 0.85rem;
-  font-style: italic;
-  margin-top: 1.6rem;
-}
-
-// ── Closing CTA ─────────────────────────────────────────────────
-.closing {
-  text-align: center;
-  padding: 5rem 1.5rem 6rem;
-  border-top: 1px solid $ds-hair;
-  margin-top: 2rem;
-}
-.closing h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 1.6rem; }
-
-// ── Platforms note ──────────────────────────────────────────────
-.platforms { color: $ds-muted; font-size: 0.96rem; }
-.platforms strong { color: $ds-paper; font-weight: 600; }
-
-// ── Navbar + footer polish ──────────────────────────────────────
 .navbar { border-bottom: 1px solid $ds-hair; }
-.navbar-brand { font-family: $headings-font-family; font-weight: 600; letter-spacing: 0.01em; }
-.navbar .nav-link { letter-spacing: 0.02em; }
-.nav-footer { border-top: 1px solid $ds-hair; font-size: 0.85rem; }
-.nav-footer a { color: $ds-muted; }
-.nav-footer a:hover { color: $ds-brass; }
+.navbar-brand { font-family: $headings-font-family; font-weight: 600; }
 
-// Respect reduced-motion globally
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
-}
+// A little breathing room between stacked buttons on the homepage.
+.btn { margin: 0.25rem 0.4rem 0.25rem 0; }

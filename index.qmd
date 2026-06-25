@@ -1,132 +1,30 @@
 ---
+title: "Light. Control. Effortless."
+subtitle: "Lighting and control integration for high-end homes and commercial spaces."
 pagetitle: "Diligent Services — Lighting & Control Integration"
-description: "Diligent Services designs, installs, and programs lighting, AV, control, and networking for high-end residential and commercial spaces across California and Nevada. A DBA of Carmelita Enterprises Inc, CSLB 1132892."
-page-layout: full
 toc: false
-anchor-sections: false
 ---
 
-::: {.hero}
-[Lighting & Control Integration · California & Nevada]{.hero-eyebrow}
+Diligent Services designs, installs, and programs the lighting, audio/visual, control, and networking systems that make a space feel effortless. We are a small, family-run firm, and we carry a project from design through programming and the support that follows, so the technology stays out of the way.
 
-[Light. Control.<br>Effortless.]{.hero-title}
+[Start a project](contact.qmd){.btn .btn-primary} [See our services](services.qmd){.btn .btn-outline-secondary}
 
-[We design, install, and program lighting, audio/visual, control, and networking for high-end homes and commercial spaces across California and Nevada. Quiet to operate, considered in every detail, built to disappear into the room.]{.hero-sub}
+## What we do
 
-[Start a project](contact.qmd){.btn-cta} [See our capabilities](services.qmd){.btn-ghost}
-:::
+- **Lighting and tunable light.** Layered, dimmable, full-spectrum lighting, designed and programmed to suit a room at every hour.
+- **Audio and visual.** Distributed audio, media rooms, and displays, integrated and tuned to the space.
+- **Control and automation.** One simple interface for lighting, shades, climate, and media.
+- **Networking and infrastructure.** The structured wiring and reliable network everything else depends on.
 
-<hr class="rule">
+## Why Diligent Services
 
-::: {.section}
-[What we do]{.section-kicker}
+- **One accountable team.** Design, programming, installation, and support under one roof.
+- **We specify and program.** We design the system and write the programming, then stand behind it.
+- **Family-run since 2002.** A small team that earns the next project by referral.
+- **Licensed in California.** Carmelita Enterprises Inc, CSLB 1132892.
 
-[Four disciplines, integrated as one system. We specify and program platforms such as Lutron, Savant, and Ketra, then make them work together so a residence, a retail floor, or a hospitality venue behaves as a single, calm whole.]{.section-lead}
+## Ready to start?
 
-::: {.pillars}
-::: {.pillar}
-[01]{.ix}
+Tell us about your space and how you want it to work, and we will take it from there.
 
-### Lighting & Tunable Light
-
-Layered, dimmable, color-tunable lighting that flatters a room and follows the day. The same discipline serves a private residence, a retail boutique, or a hospitality floor.
-:::
-::: {.pillar}
-[02]{.ix}
-
-### Audio / Visual
-
-Distributed audio and video that reads cleanly in living spaces and across commercial properties, with sources, displays, and acoustics resolved before a single wire is pulled.
-:::
-::: {.pillar}
-[03]{.ix}
-
-### Control & Automation
-
-One interface for light, shade, climate, and media, so a home or a venue responds to a single touch, a schedule, or a scene without anyone tending it.
-:::
-::: {.pillar}
-[04]{.ix}
-
-### Networking & Infrastructure
-
-The wired and wireless backbone every other system depends on: structured cabling, resilient networks, and clean racks sized for homes and commercial sites alike.
-:::
-:::
-:::
-
-<hr class="rule">
-
-::: {.section}
-[Why Diligent Services]{.section-kicker}
-
-::: {.why}
-::: {.tile}
-### Resi-mercial range
-
-Luxury residences and commercial spaces, from active-adult communities in Northern California to retail and hospitality work across California and Nevada.
-:::
-::: {.tile}
-### Family-run, since 2002
-
-Founded by Tony and Barbara Myers, run today by Sam and Pearl Myers. A small team that answers for its own work and earns the next project by referral.
-:::
-::: {.tile}
-### We specify and program
-
-Not box-movers. We design the system, integrate the platforms, write the programming, and commission it so it holds up after we leave.
-:::
-::: {.tile}
-### Licensed in California
-
-Carmelita Enterprises Inc, CSLB 1132892. Accountable and documented from proposal through closeout.
-:::
-:::
-:::
-
-<hr class="rule">
-
-::: {.section}
-[Selected work]{.section-kicker}
-
-[A working portfolio across California and Nevada, from luxury residential to commercial and hospitality. We design, program, and stand behind lighting and control on platforms including Lutron, Savant, and Ketra.]{.section-lead}
-
-::: {.work}
-::: {.work-card}
-[Builder programs]{.cat}
-
-### A multi-year program across Northern California
-
-We run an ongoing, multi-home program for a national homebuilder's luxury active-adult communities in the greater Sacramento region, delivering repeatable lighting, shading, and network packages across dozens of homes with full change-order support.
-:::
-::: {.work-card}
-[Commercial & retail]{.cat}
-
-### Lighting control for a globally recognized brand
-
-We're the lighting-control specialist on luxury retail boutiques for a globally recognized brand, modernizing aging proprietary control to a current Lutron platform with custom-engraved keypads and scene control, on tight overnight windows that keep flagship stores trading.
-:::
-::: {.work-card}
-[Hospitality · in development]{.cat}
-
-### Modernizing lighting for hospitality & nightlife
-
-We migrate legacy panel-based dimming in hospitality and nightlife venues to a current Lutron HomeWorks platform with tunable, dynamic feature lighting and remote-supportable scene control, so a venue can refresh its look without re-pulling its existing infrastructure.
-:::
-::: {.work-card}
-[Our reference estate]{.cat}
-
-### The 22-zone home where we prove every approach
-
-Our own reference installation is a 22-zone residence where we run Savant control over Lutron lighting end to end, the home we use to prove and refine every lighting, shading, and control approach before we put it in a client's space.
-:::
-:::
-
-[Client names withheld by agreement. We're glad to walk you through relevant work on a call.]{.work-note}
-:::
-
-::: {.closing}
-## Let's design something quietly extraordinary.
-
-[Start a project](contact.qmd){.btn-cta}
-:::
+[Get in touch](contact.qmd){.btn .btn-primary}

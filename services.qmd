@@ -1,37 +1,37 @@
 ---
 title: "Services"
 pagetitle: "Services — Diligent Services"
-description: "Lighting, audio/visual, control, and the systems behind them, designed and programmed for high-end residential and commercial spaces across California and Nevada."
+description: "Lighting, audio/visual, control, and the systems behind them, designed and programmed for high-end homes and commercial spaces."
 toc: true
 toc-title: "On this page"
 ---
 
-We design, install, and program integrated lighting and control systems for high-end residential and commercial spaces across California and Nevada, from private estates and luxury active-adult communities to retail boutiques and hospitality interiors. The work is the same discipline at every scale: get the light, the sound, the control, and the network right, then make them disappear into a space that simply works.
+We design, install, and program integrated lighting and control systems for high-end homes and commercial spaces. The work is the same discipline at every scale: get the light, the sound, the control, and the network right, then make them disappear into a space that simply works.
 
-## Lighting & Tunable Light
+## Lighting and Tunable Light
 
-Architectural lighting and full-spectrum tunable light, designed and programmed so a room reads the way it should at every hour. We specify and commission fixtures and lighting control for residences, retail, and hospitality, with color and intensity that flatter a living space, a gallery wall, or a display case, on schedules and scenes that hold steady long after we leave.
+Architectural lighting and full-spectrum tunable light, designed and programmed so a room reads the way it should at every hour. We specify and commission fixtures and lighting control, with color and intensity on schedules and scenes that hold steady long after we leave.
 
-## Audio / Visual
+## Audio and Visual
 
-Distributed audio, home theater, and display systems for homes and commercial interiors. We handle the room acoustics, the screens, and the sources, then tie them into the control system so playback is one clean gesture, whether that's a private screening room, whole-property music, or background audio and signage across a commercial floor.
+Distributed audio, home theater, and display systems. We handle the room acoustics, the screens, and the sources, then tie them into the control system so playback is one clean gesture.
 
-## Control & Automation
+## Control and Automation
 
-One coherent control layer over lighting, shades, climate, audio, and video. We program the platforms that run the room, on a keypad, a touchscreen, or a phone, so a single press sets a scene, opens the house for the morning, or readies a venue for service. The goal is fewer decisions for the client, not more screens.
+One coherent control layer over lighting, shades, climate, audio, and video. We program the platforms that run the room, on a keypad, a touchscreen, or a phone, so a single press sets a scene. The goal is fewer decisions for the client, not more screens.
 
-## Networking, Security & Infrastructure
+## Networking, Security, and Infrastructure
 
-The wired and wireless backbone everything else depends on: structured cabling, managed networks, surveillance, and access control sized for the property. We build infrastructure that holds up under a full estate or a busy commercial floor, with the headroom and reliability a luxury install needs and the documentation to maintain it.
+The wired and wireless backbone everything else depends on: structured cabling, managed networks, surveillance, and access control sized for the property, with the documentation to maintain it.
 
-## Service & Support
+## Service and Support
 
-Systems we install are systems we stand behind. We offer ongoing service, monitoring, and updates for the lighting and control we deliver, resolving issues, adapting scenes as a space evolves, and keeping firmware and programming current. For multi-property and commercial clients, that means a single team that already knows the system.
+Systems we install are systems we stand behind. We offer ongoing service, monitoring, and updates for the lighting and control we deliver, resolving issues and keeping programming current as a space evolves.
 
-::: {.platforms}
-**Platforms we work with.** We design around the platforms that hold up in luxury work and program them ourselves: **Savant** for whole-property control, **Lutron** for lighting control and shading, and **Ketra** as a tunable-light platform. We specify, install, and commission these systems. What we offer is the design and programming, not a dealer or certification badge.
-:::
+### Platforms we work with
+
+We design around proven professional platforms and program them ourselves, including Lutron for lighting control and shading and Savant for whole-property control. What we offer is the design and the programming, not a sales counter.
 
 ---
 
-Ready to talk? [Start a project](contact.qmd){.btn-cta}
+Ready to talk? [Start a project](contact.qmd){.btn .btn-primary}
