@@ -18,7 +18,7 @@ title: How to Generate a Hero Image using Python.PIL
 
 
 ### Instructions for Placing Hero Images and Updating Blog Posts
-![images/Python-PIL-Generate-Hero-Image.png](images/Create-Publish-Quarto-Blog-Post.png)
+![images/Python-PIL-Generate-Hero-Image.png](images/Python-PIL-Generate-Hero-Image.png)
 
 ### 1. Generate the hero image and optionally update the `.qmd` file:
    ```bash

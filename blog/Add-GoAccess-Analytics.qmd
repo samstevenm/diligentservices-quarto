@@ -189,6 +189,6 @@ journalctl -u goaccess
 
 By following this idempotent setup, you’ve configured GoAccess to provide persistent, real-time analytics for your Quarto site. This approach ensures GoAccess handles log rotations seamlessly, retains historical data, and updates the analytics dashboard dynamically.
 
-For more customization and advanced options, consult the [GoAccess documentation](https://goaccess.io/documentation).
+For more customization and advanced options, consult the [GoAccess documentation](https://goaccess.io/man).
 
 **Happy analyzing!**

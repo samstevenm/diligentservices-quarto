@@ -29,7 +29,7 @@ tags:
 _Calculating and Visualizing Arc Lengths for Aluminum Roofs and Plywood Rib Joists with Python, Quarto and Visual Studio Code as starting point for CNC iterations._
 
 ## TL;DR
-This guide covers the arc length calculations for a aluminum roofs that will have undermounted curving plywood rib joists. These calculations are intended for initial cutting with CNC, but lengths and dimensions may need to be adjusted as we refine the process. Below, we compute and visualize the arc radii, heights, and key dimensions. While this version provides the base design, we expect iterative modifications as we cut, test, and adjust dimensions before finalizing in “Part 2.”
+This guide covers the arc length calculations for aluminum roofs that will have undermounted curving plywood rib joists. These calculations are intended for initial cutting with CNC, but lengths and dimensions may need to be adjusted as we refine the process. Below, we compute and visualize the arc radii, heights, and key dimensions. While this version provides the base design, we expect iterative modifications as we cut, test, and adjust dimensions before finalizing in “Part 2.”
 
 --- 
 

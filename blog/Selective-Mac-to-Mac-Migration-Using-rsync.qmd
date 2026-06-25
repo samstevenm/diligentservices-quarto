@@ -1,6 +1,6 @@
 ---
 title: "Selective Mac-to-Mac Migration Using rsync in 'Share Disk' Mode"
-author: "Sam M^"
+author: "Sam M"
 date: "2025-01-23"
 categories: [macOS, migration, rsync, system-administration]
 format: html
