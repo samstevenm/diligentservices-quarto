@@ -18,6 +18,8 @@ website:
         href: support/index.qmd
       - text: "Contact"
         href: contact.qmd
+      - text: "How this site is made"
+        href: g611/index.qmd
   navbar:
     left:
       - text: "Home"
