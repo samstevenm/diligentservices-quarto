@@ -1,5 +1,5 @@
 ---
-title: "Lighting and control, done right."
+title: "The systems behind a space that just works."
 subtitle: "Design, installation, and programming for high-end homes and commercial spaces."
 pagetitle: "Diligent Services — Lighting & Control Integration"
 toc: false
