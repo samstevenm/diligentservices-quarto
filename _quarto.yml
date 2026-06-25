@@ -20,19 +20,10 @@ website:
         href: about.qmd
       - text: "Blog"
         href: blog/index.qmd
-        menu:
-          - text: "Latest Posts"
-            href: blog/index.qmd
-          - text: "Categories"
-            href: blog/categories.qmd
-          - text: "Tags"
-            href: blog/tags.qmd
       - text: "Contact"
         href: contact.qmd
       - text: "Support"
         href: support/index.qmd
-      - text: "Docs"
-        href: README_.qmd
     right:
       - icon: linkedin
         href: https://www.linkedin.com/in/samstevenmyers/
