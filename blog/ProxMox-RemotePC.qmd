@@ -1,0 +1,247 @@
+---
+title: "Setting Up Proxmox VE with Windows 10 Guest VM and DHCP Networking"
+description: "A step-by-step guide to setting up Proxmox VE on a mini PC, enabling DHCP networking with Tailscale, and preparing for guest OS installations."
+author: "Sam M"
+date: "2024-01-08"
+categories: 
+  - Networking
+  - VM
+  - Self-Hosting
+  - System Administration
+  - Tutorials
+format:
+  html:
+    code-fold: true
+    toc: true
+tags: [Proxmox VE, Windows 10, DHCP, Tailscale, Virtualization]
+---
+
+Setting up Proxmox VE with dynamic DHCP networking provides flexibility for hosting virtual machines (VMs) and containers in various environments. This guide will walk you through the complete process: preparing the USB installer, configuring networking for DHCP, enabling **Tailscale** for remote access, and setting up **Windows 10** and **Android x86** guest VMs.
+
+For this setup, we’re using a **mini PC** connected to a **Mac’s shared internet connection** for the initial installation. Internet Sharing ensures Proxmox has internet access during setup and while uploading ISOs to the server.
+
+Once complete, Proxmox will provide a **stable base OS** for remotely managing arbitrary guest OS installations and containers, including physical device passthrough.
+
+---
+
+## **BIOS Notes**
+
+Before installing Proxmox VE, adjust the mini PC BIOS for compatibility and reliability:
+
+1. **Disable Secure Boot**: Non-windows OS seems to require Secure Boot to be disabled.
+2. **Change SATA Mode to AHCI**: The default RAID mode may cause issues; switch to AHCI.
+3. **Power Settings**:
+   - Set the computer to start automatically at a specific time (e.g., daily at 12:01 AM).
+   - Configure the system to **always restart after power failure** for reliability in hosting environments.
+
+To access the BIOS, press `F2` or `DEL` during boot.
+
+---
+
+## **1. Internet Connection Sharing on macOS**
+
+To give the mini PC internet access during the initial setup, enable Internet Sharing on your Mac:
+
+### **Step 1: Enable Internet Sharing**
+1. Open **System Preferences > Sharing** on your Mac.
+2. Select **Internet Sharing** in the left-hand menu (but do not enable it yet).
+3. In the **Share your connection from** dropdown, select **Wi-Fi**.
+4. In the **To computers using** section, check **Ethernet**.
+5. Finally, enable **Internet Sharing** by checking the box next to it.
+
+> Your Mac will act as the gateway for the OptiPlex, providing internet access to it via Ethernet.
+
+### **Step 2: Connect the OptiPlex**
+1. Use an Ethernet cable to connect your Mac to the mini PC.
+2. During the Proxmox installation, use the following network settings:
+   - **Gateway**: `192.168.2.1` (your Mac’s IP for the Ethernet connection)
+   - **IP Address**: `192.168.2.42` (or configure DHCP as described below)
+   - **DNS Server**: `9.9.9.9` (or your preferred DNS)
+
+---
+
+## **2. Prepare Proxmox VE USB Installer**
+
+### **Step 1: Download Proxmox VE ISO**
+Visit the [Proxmox downloads page](https://www.proxmox.com/en/downloads) and download the latest Proxmox VE ISO.
+
+Save the file to your Mac:
+```plaintext
+/Users/yourname/Downloads/proxmox-ve_8.3-1.iso
+```
+
+### **Step 2: Write ISO to USB**
+Insert a USB drive (at least 4GB) and identify it:
+```bash
+diskutil list
+```
+
+Write the ISO to the USB:
+```bash
+sudo dd if=/Users/yourname/Downloads/proxmox-ve_8.3-1.iso of=/dev/rdiskX bs=1m
+diskutil eject /dev/rdiskX
+```
+> Replace `/dev/rdiskX` with the correct disk identifier from `diskutil list`.
+
+---
+
+## **3. Install Proxmox VE**
+
+### **Step 1: Boot from USB**
+Insert the USB into your mini PC, boot into BIOS/UEFI (press `F12` or `DEL`), and select the USB drive as the boot device.
+
+### **Step 2: Install Proxmox VE**
+1. Follow the Proxmox installer steps.
+2. During the setup, configure the network:
+   - **IP Address**: `192.168.2.42`
+   - **Gateway**: `192.168.2.1` (your Mac’s shared internet)
+   - **DNS Server**: `9.9.9.9`
+
+After installation, access the web interface at:
+```plaintext
+https://192.168.2.42:8006
+```
+
+---
+
+## **4. Upload Windows 10 and Other ISOs**
+
+### **Option 1: Download Windows 10 ISO**
+Download the Windows 10 ISO from Microsoft’s website:
+[Windows 10 ISO](https://www.microsoft.com/en-us/software-download/windows10ISO)
+
+### **Option 2: Use Existing ISOs on Mac**
+If the ISO is already on your Mac, upload it directly using the Proxmox web interface:
+1. Navigate to **Datacenter > local > ISO Images**.
+2. Click **Upload**, select the ISO file, and upload over the Ethernet connection.
+   > Upload speeds over Ethernet are far faster than using a USB transfer.
+
+---
+
+## **5. Configure Networking for DHCP**
+
+### **Edit Networking Configuration**
+To allow the OptiPlex to adapt dynamically to different networks, configure `eno1` to use DHCP:
+
+1. SSH into the Proxmox host:
+   ```bash
+   ssh root@192.168.2.42
+   ```
+
+2. Edit the `/etc/network/interfaces` file:
+   ```bash
+   nano /etc/network/interfaces
+   ```
+
+3. Replace with the following:
+   ```plaintext
+   # Loopback interface
+   auto lo
+   iface lo inet loopback
+
+   # Primary Ethernet interface (DHCP)
+   auto eno1
+   iface eno1 inet dhcp
+
+   # Bridge for VMs
+   auto vmbr0
+   iface vmbr0 inet dhcp
+       bridge-ports eno1
+       bridge-stp off
+       bridge-fd 0
+
+   # Optional fallback static configuration
+   iface eno1 inet static
+       address 192.168.2.42/24
+       gateway 192.168.2.1
+
+   source /etc/network/interfaces.d/*
+   ```
+
+4. Restart networking:
+   ```bash
+   systemctl restart networking
+   ```
+
+5. Verify the DHCP-assigned IP:
+   ```bash
+   ip a
+   ```
+
+---
+
+## **6. Install and Configure Tailscale**
+
+### **Step 1: Install Tailscale**
+Install Tailscale to ensure remote access to Proxmox:
+```bash
+curl -fsSL https://tailscale.com/install.sh | sh
+```
+
+### **Step 2: Authenticate**
+Authenticate the host to your Tailscale account:
+```bash
+tailscale up
+```
+
+### **Step 3: Enable Exit Node and Forwarding**
+1. Advertise the server as an exit node:
+   ```bash
+   tailscale up --advertise-exit-node
+   ```
+2. Enable forwarding:
+   ```bash
+   echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+   echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.conf
+   sysctl -p
+   ```
+
+---
+
+## **7. Create a Windows 10 VM**
+
+### **Step 1: Create VM**
+1. In the Proxmox GUI, select **Create VM**.
+2. Configure:
+   - **OS**: Windows 10 ISO.
+   - **System**: Enable QEMU Agent.
+   - **Disk**: Allocate at least 64GB.
+   - **CPU/Memory**: Assign as needed.
+   - **Network**: Use `vmbr0`.
+
+### **Step 2: Add VirtIO Drivers**
+1. Go to **Hardware > Add CD/DVD Drive**.
+2. Select the VirtIO Drivers ISO.
+
+### **Step 3: Install Windows 10**
+1. Start the VM.
+2. Load VirtIO drivers when prompted for a disk during installation.
+3. Complete the Windows setup.
+
+---
+
+## **8. Manage Guest OS and Containers**
+
+Once your Proxmox VE is set up and accessible via Tailscale, you can experiment with:
+- **Additional Guest OSes**: Install Linux distributions, Android x86, or other systems.
+- **LXC Containers**: Use Proxmox’s containerization features for lightweight workloads.
+- **Physical Device Passthrough**: Configure USB or PCI passthrough for specialized hardware.
+
+---
+
+## **9. Manage Credentials**
+Use a password manager to securely store:
+- Proxmox root password.
+- Tailscale credentials.
+- Guest OS license keys.
+
+Organize credentials with relevant tags for easy retrieval.
+
+---
+
+## **Conclusion**
+
+With Proxmox VE configured for DHCP networking and Tailscale integration, you have a stable base OS ready for hosting VMs and containers. This setup allows remote management and adaptability to any network, ensuring reliability and flexibility for your virtualized workloads.
+
+> **Standard Disclaimer**  
+This post is a mix of human and AI effort [(G611)](/blog/Selective-Mac-to-Mac-Migration-Using-rsync.qmd#author’s-note). While I’ve reviewed and finalized the content, some parts reflect AI-generated input. Always do your own due diligence and consult professionals when needed.  
