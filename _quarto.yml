@@ -20,6 +20,8 @@ website:
         href: contact.qmd
       - text: "How this site is made"
         href: g611/index.qmd
+      - text: "Docs"
+        href: README_.qmd
   navbar:
     left:
       - text: "Home"
