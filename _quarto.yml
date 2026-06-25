@@ -6,12 +6,12 @@ project:
 website:
   title: "Diligent Services"
   site-url: https://diligentservices.io
-  description: "Diligent Services designs, installs, and programs lighting, AV, control, and networking for high-end residential and commercial spaces across California and Nevada. A DBA of Carmelita Enterprises Inc, CSLB 1132892."
+  description: "Diligent Services designs, installs, and programs lighting, AV, control, and networking for high-end residential and commercial spaces in California. A DBA of Carmelita Enterprises Inc, CSLB 1132892."
   repo-url: https://github.com/samstevenm/diligentservices-quarto/
   repo-actions: [issue]
   favicon: images/favicon.ico
   page-footer:
-    left: "Diligent Services · Lighting & Control Integration · California & Nevada"
+    left: "Diligent Services · Lighting & Control Integration · California"
     center: "Diligent Services is a DBA of Carmelita Enterprises Inc."
     right:
       - text: "Support"
@@ -36,6 +36,8 @@ website:
         href: contact.qmd
       - text: "Support"
         href: support/index.qmd
+      - text: "Docs"
+        href: README_.qmd
     right:
       - icon: linkedin
         href: https://www.linkedin.com/in/samstevenmyers/
@@ -54,4 +56,4 @@ format:
       - text: |
           <link rel="preconnect" href="https://fonts.googleapis.com">
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-          <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">

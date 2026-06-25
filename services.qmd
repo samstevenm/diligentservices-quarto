@@ -6,7 +6,7 @@ toc: true
 toc-title: "On this page"
 ---
 
-We design, install, and program integrated lighting and control systems for high-end homes and commercial spaces. The work is the same discipline at every scale: get the light, the sound, the control, and the network right, then make them disappear into a space that simply works.
+We design, install, and program integrated lighting and control systems for high-end homes and commercial spaces. The work is the same discipline at every scale: get the light, the sound, the control, and the network right, then keep them out of the way so the space just works.
 
 ## Lighting and Tunable Light
 
@@ -18,7 +18,7 @@ Distributed audio, home theater, and display systems. We handle the room acousti
 
 ## Control and Automation
 
-One coherent control layer over lighting, shades, climate, audio, and video. We program the platforms that run the room, on a keypad, a touchscreen, or a phone, so a single press sets a scene. The goal is fewer decisions for the client, not more screens.
+One coherent control layer over lighting, shades, climate, audio, and video. We program the platforms that run the room, on a keypad, a touchscreen, or a phone, so a single press sets a scene. The goal is fewer decisions for the client and fewer screens to learn.
 
 ## Networking, Security, and Infrastructure
 

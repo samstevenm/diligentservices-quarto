@@ -6,10 +6,10 @@ toc: false
 
 ### Let's talk.
 
-Most of our work starts with a conversation. Tell us about your space - a home or a commercial interior - and what you want it to do, and we will take it from there.
+Most of our work starts with a conversation. Tell us about your space, whether a home or a commercial interior, and what you want it to do, and we will take it from there.
 
 - **Email:** [info@diligentservices.io](mailto:info@diligentservices.io)
 - **Phone:** (424) 448-5200
-- **Service area:** California and Nevada
+- **Service area:** California
 
 Already a client and need a hand? Head to [Support](support/index.qmd).
