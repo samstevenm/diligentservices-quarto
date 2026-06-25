@@ -6,16 +6,26 @@ project:
 website:
   title: "Diligent Services"
   site-url: https://diligentservices.io
-  description: "Diligent Services is a consulting company that specializes in building bespoke solutions."
+  description: "Diligent Services designs, installs, and programs lighting, AV, control, and networking for high-end residential and commercial spaces across California and Nevada. A DBA of Carmelita Enterprises Inc, CSLB 1132892."
   repo-url: https://github.com/samstevenm/diligentservices-quarto/
   repo-actions: [issue]
   favicon: images/favicon.ico
   page-footer:
+    left: "Diligent Services · Lighting & Control Integration · California & Nevada"
     center: "Diligent Services is a DBA of Carmelita Enterprises Inc."
+    right:
+      - text: "Support"
+        href: support/index.qmd
+      - text: "Contact"
+        href: contact.qmd
+      - text: "How this site is made"
+        href: g611/index.qmd
   navbar:
     left:
       - text: "Home"
         href: index.qmd
+      - text: "Services"
+        href: services.qmd
       - text: "About"
         href: about.qmd
       - text: "Blog"
@@ -34,12 +44,12 @@ website:
 
 format:
   html:
-    theme: 
-      - journal 
-    # Here are some bootstrap theme options:
-    #   default, cerulean, cosmo, cyborg, darkly, flatly, journal, 
-    #   litera, lumen, lux, materia, minty, morph, pulse, quartz,
-    #   sandstone, simplex, sketchy, slate, solar, spacelab, superhero,
-    #   united, vapor, yeti, zephyr
+    theme:
+      - cosmo
       - styles/custom.scss
-    css: styles/custom.scss
+    toc: true
+    include-in-header:
+      - text: |
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">

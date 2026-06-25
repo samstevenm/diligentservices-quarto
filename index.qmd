@@ -1,29 +1,30 @@
 ---
-title: "Welcome to Diligent Services"
-format:
-  html:
-    toc: true
+title: "Light. Control. Effortless."
+subtitle: "Lighting and control integration for high-end homes and commercial spaces."
+pagetitle: "Diligent Services — Lighting & Control Integration"
+toc: false
 ---
-### Our Services
 
-- **Interior Remodeling:** Transforming kitchens, bathrooms, and living spaces to enhance functionality and aesthetics.
-- **Smart Home Technology:** Integrating modern smart home systems for convenience, security, and energy efficiency.
-- **Custom Projects:** Tailoring solutions to meet unique client needs and preferences, ensuring high satisfaction.
-- **Luxury AV Services:** Providing high-end audio-visual solutions to elevate your home entertainment experience.
-- **Home Automation Systems:** Implementing cutting-edge technology to automate and control various aspects of your home.
-- **Commercial Construction:** Managing and executing commercial construction and renovation projects with a focus on quality and efficiency.
-- **Technical Consulting:** Delivering expert advice on complex technical issues to enhance user experience and project outcomes.
+Diligent Services designs, installs, and programs the lighting, audio/visual, control, and networking systems that make a space feel effortless. We are a small, family-run firm, and we carry a project from design through programming and the support that follows, so the technology stays out of the way.
 
-### Why Choose Us
+[Start a project](contact.qmd){.btn .btn-primary} [See our services](services.qmd){.btn .btn-outline-secondary}
 
-- **Experience and Expertise:** Over 20 years of experience in general contracting and a deep understanding of modern construction and renovation techniques.
-- **Family Values:** A family-operated business with a commitment to integrity, trust, and exceptional service.
-- **Client-Centered Approach:** We prioritize our clients' needs and preferences, providing personalized solutions and attentive service.
+## What we do
 
-### Our Mission
+- **Lighting and tunable light.** Layered, dimmable, full-spectrum lighting, designed and programmed to suit a room at every hour.
+- **Audio and visual.** Distributed audio, media rooms, and displays, integrated and tuned to the space.
+- **Control and automation.** One simple interface for lighting, shades, climate, and media.
+- **Networking and infrastructure.** The structured wiring and reliable network everything else depends on.
 
-At Diligent Services, our mission is to deliver top-quality construction, renovation, and consulting services with a focus on excellence, integrity, and customer satisfaction. We aim to create spaces that are not only beautiful but also functional and reflective of our clients' lifestyles and values.
+## Why Diligent Services
 
-### Blog
+- **One accountable team.** Design, programming, installation, and support under one roof.
+- **We specify and program.** We design the system and write the programming, then stand behind it.
+- **Family-run since 2002.** A small team that earns the next project by referral.
+- **Licensed in California.** Carmelita Enterprises Inc, CSLB 1132892.
 
-Check out our blog for updates on the latest trends in construction, smart home technology, and luxury AV services. Or, more likely, sporadic posts on whatever Sam finds interesting.
+## Ready to start?
+
+Tell us about your space and how you want it to work, and we will take it from there.
+
+[Get in touch](contact.qmd){.btn .btn-primary}
