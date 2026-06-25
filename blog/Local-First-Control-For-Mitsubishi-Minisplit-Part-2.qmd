@@ -285,5 +285,8 @@ Loose ends:
 - **Push instead of poll.** The modules speak MQTT; moving from polling to
   event-driven state is the obvious next upgrade.
 
-The code — library, CLI, bridge, and the reverse-engineered API notes — is in
-the `minisplit-local` repo.
+The code — library, CLI, bridge, and the reverse-engineered API notes — is open
+source on GitHub:
+[**samstevenm/minisplit-local-public**](https://github.com/samstevenm/minisplit-local-public).
+Standard-library Python, MIT-licensed. Clone it, drop in your own `units.yaml`,
+and pick your front end.
