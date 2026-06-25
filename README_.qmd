@@ -7,23 +7,35 @@ format:
 
 ### Diligent Services Quarto Project
 
-This site was created using Quarto, an open-source scientific and technical publishing system. Below you will find detailed information about the project structure and how to update the site.
+This is the source for **diligentservices.io**, a static site built with [Quarto](https://quarto.org/). It is designed to be **hand-maintained**: every page is plain Markdown, and a step-by-step, non-technical guide lives in **[EDITING.md](EDITING.md)** — how to edit pages, change the menu / footer / contact details, recolor the site, add a blog post, publish, and roll back.
+
+## What's changed (2026-06-25 refresh)
+
+A light refresh focused on honest, generic, easy-to-maintain content:
+
+- **Repositioned** from "general contractor / remodeler" to **lighting & control integration** for high-end residential and commercial spaces.
+- **Light, clean theme** (warm cream + one brass accent, `cosmo` base) replacing the old construction-orange look. Colors are documented, named variables at the top of `styles/custom.scss`.
+- **Every page is plain Markdown** now — no custom HTML — so anyone can hand-edit the words.
+- **No client names or project specifics** anywhere; capability copy is generic.
+- **New editing guide** (`EDITING.md`) and **safe deploy tooling**: `publish.sh` backs up the live site and auto-rolls-back on failure; `rollback.sh` reverts to any prior version.
+- **Legal-entity footer** ("Diligent Services is a DBA of Carmelita Enterprises Inc.") plus a live `/support` page, for Apple Developer compliance.
+- **One canonical AI-authorship colophon** at `/g611/`, linked site-wide in the footer.
+- **Blog:** the Mitsubishi mini-split Part 2 post now links its open-source code at **[minisplit-local-public](https://github.com/samstevenm/minisplit-local-public)** (MIT, standard-library Python).
 
 ## Project Structure
 
-The repository contains the following main files and directories:
-
-- `_quarto.yml`: Main configuration file.
-- `index.qmd`: Main page.
-- `about.qmd`: About page.
-- `contact.qmd`: Contact page.
-- `styles/custom.scss`: Custom styles.
-- `blog/*`: Blog posts.
-- `images/logo.png`: Company logo.
-- `_site/`: Generated site files (ignored in Git).
-- `.gitignore`: Git ignore file to exclude unnecessary files.
-- `cloud-config.yaml`: Cloud-init script for initial server setup.
-- `README_.qmd`: This file, providing meta information about the project.
+- `_quarto.yml`: site config (nav, footer, theme, fonts).
+- `index.qmd`, `services.qmd`, `about.qmd`, `contact.qmd`: the main pages.
+- `support/index.qmd`: the public support page.
+- `g611/index.qmd`: the AI-authorship colophon (linked in the footer); `_g611.qmd` is a short include that points at it.
+- `blog/*`: blog posts.
+- `styles/custom.scss`: theme colors and fonts (documented, named variables at the top).
+- `EDITING.md`: **start here to update the site by hand.**
+- `publish.sh` / `rollback.sh`: safe, rollback-able deploy scripts (run on the server).
+- `images/`: favicons and image assets.
+- `_site/`: generated output (git-ignored).
+- `cloud-config.yaml`: cloud-init for initial server setup.
+- `README_.qmd`: this file (symlinked to `README.md`).
 
 ## Attribution
 
@@ -152,50 +164,26 @@ This README describes exactly what this repository is and what it contains. The 
     git push origin main
     ```
 
-## Updating the Site on the Server
+## Updating the Site on the Server (publish + roll back)
 
-13. **SSH into the Server**:
+The live site does **not** update automatically. To publish, SSH into the server and run the safe publish script:
 
-    ```bash
-    ssh -i ~/.ssh/ssgh.pem root@your_server_ip
-    ```
+```bash
+cd /var/www/diligentservices/diligentservices-quarto
+git pull
+./publish.sh
+```
 
-14. **Navigate to the Project Directory**:
+`publish.sh` backs up the current live site, pulls, activates the Python venv (required, or the computational blog posts fail to build), renders, and **automatically restores the previous version if anything fails** — so the live site is never left half-broken. It prints the previous commit so you can roll back. nginx serves the rendered `_site/` directly; no reload needed.
 
-    ```bash
-    cd /var/www/<SITENAME>/<REPONAME>
-    ```
+To **roll back** to a previous version (every published version is just a git commit, so nothing is ever lost):
 
-15. **Pull the Latest Changes from GitHub**:
+```bash
+./rollback.sh <commit>              # e.g. ./rollback.sh dc8e93d  (find commits with: git log --oneline)
+git checkout main && ./publish.sh   # return to the latest when you're ready
+```
 
-    ```bash
-    git pull origin main
-    ```
-
-16. **Generate the Site on the Server**:
-
-    ```bash
-    quarto render
-    ```
-
-    You should see output like:
-
-    ```
-    [1/6] contact.qmd
-    [2/6] index.qmd
-    [3/6] about.qmd
-    [4/6] <REPONAME>/contact.qmd
-    [5/6] <REPONAME>/index.qmd
-    [6/6] <REPONAME>/about.qmd
-
-    Output created: _site/index.html
-    ```
-
-17. **Reload Nginx to Apply Changes**:
-
-    ```bash
-    sudo systemctl reload nginx
-    ```
+See **[EDITING.md](EDITING.md)** for the full, non-technical walkthrough of editing and publishing.
 
 ## Nginx Folder Structure
 
