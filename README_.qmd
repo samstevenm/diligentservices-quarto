@@ -41,7 +41,7 @@ For a note on how the site and our apps are written, see [How this site is made]
 - `EDITING.md`: start here to update the site by hand.
 - `publish.sh` / `rollback.sh`: safe, rollback-able deploy scripts (run on the server).
 - `images/`: favicons and image assets.
-- `README_.qmd`: this page (symlinked to `README.md`).
+- `README_.qmd`: this page (`README.md` is a symlink to it, so GitHub shows it as the repo README).
 
 ## Updating the site
 
