@@ -7,3 +7,5 @@ node_modules/
 /.quarto_cache/
 .venv/
 .python-version
+
+**/*.quarto_ipynb
