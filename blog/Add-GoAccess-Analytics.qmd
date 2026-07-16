@@ -150,6 +150,8 @@ sudo htpasswd -c /etc/nginx/.htpasswd-stats yourname
 
 (The `-c` creates the file; drop it when adding more users later.)
 
+Save that password in your password manager while you're at it. Basic auth asks again on every fresh browser session, and a one-off credential like this is exactly the kind that otherwise gets lost.
+
 Then add these inside the `server { }` block for your site, in `/etc/nginx/sites-available/yoursite`:
 
 ```nginx
