@@ -1,0 +1,213 @@
+---
+title: "Savant AirPlay 2 on a Segmented Network: Discovery Was Never the Problem"
+author: "Sam M."
+date: "2026-07-16"
+categories: [networking, smart-home, Savant, AirPlay, security, UniFi, Diligent Services]
+draft: false
+format: html
+---
+
+Yesterday Savant dropped the first beta of SavantOS 11.2.3, and it led with the
+feature a lot of us have wanted for years: **AirPlay 2 for Savant Music.** Play from your phone, group rooms, keep them in
+sync, ask Siri. The Apple-ecosystem experience, finally native to the audio
+system instead of bolted on beside it. It's a beta, it won't ship in the final
+11.2.3, and it wants every Mac Host on macOS Sequoia first. But it works.
+
+The demo language tells you who Savant built this for: *"play a song on every
+Savant Music Server in your house at the same time."* One flat broadcast domain
+where everything can see everything, AirPlay does its multicast thing, and it
+just works. For most installs that is the network, and this beta will light up
+with zero fuss.
+
+Our estate is not most installs. We love Savant, and none of what follows is a
+knock on them. Our security posture simply runs stronger than what most controls
+manufacturers design for, and a good deal stronger than what consumer electronics
+makers account for at all. Here is how we got AirPlay 2 running without giving up
+any of the segmentation we built on purpose.
+
+## Savant wants flat. The rest of the house shouldn't be.
+
+Two facts about Savant Music push people toward a flat network. The audio
+transport is AVB (IEEE 802.1 Audio-Video Bridging), which is Layer-2 and
+non-routable, so the music servers, the AVB switch, and the amps all have to
+share one broadcast domain. Host discovery rides UDP broadcast (9101/12004),
+which also dies at the first router. The AVoIP video path is Layer-2 for the same
+reasons. All of that is real, and all of it applies to Savant's own AV gear. None
+of it requires the whole house to be flat, and that gap is the whole post.
+
+So the estate runs a Ubiquiti UDM-Pro with a handful of VLANs. The trusted humans
+live on per-building client networks (Casa, Office, Casita). Everything else,
+every always-on appliance that phones home and every smart-thing firmware I will
+never get to audit, lands on one deliberately hostile network we call
+**Io(shi)T**. The S in IoT stands for Security, and IoT has no S. That VLAN is the
+untrusted-by-default cesspool, and the firewall treats it that way.
+
+Here is the catch. The Savant hosts, the audio streamers, the Sonos, and the AVB
+fabric all live on Io(shi)T too. It is all "the smart-home stuff," so it shares
+the cesspool, and the security model stays simple: trust nothing on that segment,
+keep the people on their own networks. A zone-based firewall enforces it. Client
+networks cannot open connections into Io(shi)T, Io(shi)T cannot open connections
+back out to the clients, and nothing on it can touch the gateway's management
+ports. A few surgical exceptions poke through for the printer and the HVAC
+controllers, and the default is deny.
+
+I like that posture. It is also exactly what AirPlay 2 walks into, because the
+speakers you want to play to are sitting in the cesspool and your phone is not.
+
+## The mixed bag
+
+The symptom was maddening in a specific way. Open the AirPlay picker on a phone
+and every speaker is right there: the Sonos out front, the Savant zones, the
+HomePods. Tap the kitchen HomePod and it plays. Tap the Sonos out front and you
+get a spinner, then silence. Half the list works, and which half depends on where
+you happen to be standing.
+
+That is the trap that sends people to the wrong place. If the speaker shows up in
+the list, the network must be fine, so you go poke at the speaker, or reboot it,
+or blame the beta.
+
+## Discovery was never the problem
+
+Two independent things have to be true for AirPlay to reach a given speaker. Your
+phone has to discover it, and your phone has to reach it. On a segmented network
+those run on different machinery and fail on their own schedules.
+
+Discovery is Bonjour/mDNS. The UDM has an mDNS proxy that reflects announcements
+across VLANs, and it was already on, so every speaker in the house shows up in
+the picker from every network, including the ones a phone has no route to. Showing
+up in the picker is a discovery event and nothing more.
+
+Reachability is the firewall, and the firewall was doing its job. A trusted
+client network cannot open a connection into the Io(shi)T zone, so the Sonos and
+the Savant streamers were discoverable and unreachable at the same time: reflected
+into the picker, dropped at the data path. The HomePods happened to sit on a
+client network in the trusted zone, so those played. That is the whole mixed bag.
+
+You can watch both halves from a laptop. Discovery lists everything:
+
+```
+$ dns-sd -B _airplay._tcp local.
+...  Add  ...  Front Yard          (Sonos, on Io(shi)T)
+...  Add  ...  Exterior            (Sonos, on Io(shi)T)
+...  Add  ...  Casita.Living       (Sonos, on Io(shi)T)
+...  Add  ...  MH Living Sipa      (Savant streamer, on Io(shi)T)
+...  Add  ...  Kitchen             (HomePod, trusted client net)
+```
+
+Reachability tells the real story. Resolve one of those speakers and try its
+AirPlay port from a client subnet:
+
+```
+$ nc -vz -G 3 <front-yard-sonos> 7000
+nc: connectx to <front-yard-sonos> port 7000 (tcp) failed: Operation timed out
+
+$ traceroute -m2 <front-yard-sonos>
+ 1  gateway   0.5 ms
+ 2  *                        # dropped at the firewall, one hop in
+```
+
+The port times out rather than refusing, which means the packets are being
+dropped instead of answered. The speaker is up, it is advertising, the phone can
+see it, and the phone cannot send it a single byte of audio. A speaker in the
+picker is a promise about discovery. It says nothing about whether you can stream
+to it.
+
+## The fix: one allow rule
+
+Once you frame this as reachability, the change is small and boring, which is the
+right kind of change. The zone firewall already blocks client to Io(shi)T with a
+short list of allow exceptions ordered above it. AirPlay becomes one more
+exception:
+
+```
+Allow   src: {Casa, Office, Casita client networks}
+        dst: the six speaker addresses on Io(shi)T
+        ports: any        (stateful; return traffic auto-allowed)
+        order: above the "block clients to Io(shi)T" rule
+```
+
+That is the entire change. Things I deliberately left alone:
+
+- **The network stayed segmented.** The whole point is the wall. AirPlay is one
+  labeled door in it.
+- **The Io(shi)T subnet stayed closed.** The rule targets six speaker addresses,
+  so the Savant hosts, the lighting processors, the cameras, and the rest of the
+  cesspool stay invisible to a guest's phone.
+- **The HomePods stayed put.** They already sit on a client network with good
+  5 GHz. The only SSID on Io(shi)T is 2.4 GHz, so consolidating everything onto
+  one subnet, the flat-network answer, would have made them worse.
+
+Two details are where people get this wrong. First, scope the rule by destination
+address rather than by port. AirPlay 2 sprays audio and timing across a wide range
+of dynamic high ports, so enumerating them is a losing game; pinning the rule to
+the speaker addresses and allowing all ports to them is both tighter and more
+reliable. Second, keep discovery and reachability as separate jobs. The mDNS proxy
+handles announcements, IGMP snooping handles the multicast, and the firewall
+handles the data path, so all three finally agree.
+
+## Don't VLAN-tag the AVB
+
+A warning, because the temptation shows up the moment you are in the switch
+config. Leave the AVB and AVoIP fabric alone. Those streams are Layer-2, and the
+switch, the streamers, and the Savant hosts have to stay in one broadcast domain.
+Segment around the AV gear, never through it. The day you put an AV port on its
+own VLAN to tidy things up is the day you turn a working audio system into a very
+expensive mute.
+
+## Since we were in the firewall anyway
+
+Fixing AirPlay meant reading the whole ruleset, which is a good excuse to fix the
+thing you have been meaning to. The estate's intrusion prevention had drifted into
+the least useful state: on, detecting, and logging outbound scan alerts while
+allowing them through, scoped to a single network. I set it to block and pointed
+it at the client VLANs.
+
+I left it off the Io(shi)T backbone on purpose. On a segment this dense with AV
+multicast and automation chatter, an IPS false-positive that drops a Savant
+control connection is a worse outcome than most of what it would catch there. That
+is the standing tax of an AV-heavy network: a control that is obviously correct
+everywhere else needs a second look on the wire that carries the audio. So the
+intrusion prevention blocks where blocking is safe and stays off the audio wire on
+purpose. That is the judgment an AV-heavy network keeps asking you to make.
+
+## You don't need our setup
+
+For most people flat is fine, and Savant's AirPlay 2 beta is aimed squarely at
+them. Plug it in, add the music server to the Home app, done. If that is you,
+enjoy it and skip the rest of this.
+
+If you segment, and there are good reasons to between guests, cameras, and the
+general dumpster fire of consumer IoT, the pattern here ports to any prosumer
+gateway:
+
+1. Reflect discovery with an mDNS/Bonjour proxy across the VLANs that need to see
+   the speakers.
+2. Tame the multicast with IGMP snooping and an active querier on the AV subnet.
+3. Allow reachability narrowly, from the client networks to the speaker
+   addresses, all ports, stateful return, ordered above your client-to-AV block.
+4. Leave the AVB Layer-2 domain alone.
+
+Four steps, one of them optional depending on your gear, and none of them
+"flatten the network."
+
+## Where this leaves us
+
+AirPlay reaches every common-area speaker from any room's phone now, tested and
+playing, with the segmentation and the security posture fully intact: discovery
+reflected, reachability scoped to a short list of speaker addresses, the AV fabric
+untouched, and the intrusion prevention blocking where it is safe to.
+
+One thing to know before you try it: this is beta software. AirPlay 2 for Savant
+Music will not be in the production 11.2.3 release, it is gated on macOS Sequoia
+across every Mac Host, and you add the Savant Music server to the Home app as an
+accessory through the "More options" path in the Add Accessory flow. Treat it like
+the preview it is.
+
+The Savant announcement is right that AirPlay 2 is going to be great. It is simply
+written for a flat house. If yours is segmented on purpose, the good news is that
+you keep every bit of that work and open one door.
+
+---
+
+> **Standard Disclaimer**
+This post is a mix of human and AI effort [(G611)](/g611/). While I've reviewed and finalized the content, some parts reflect AI-generated input. Always do your own due diligence and consult professionals when needed.
