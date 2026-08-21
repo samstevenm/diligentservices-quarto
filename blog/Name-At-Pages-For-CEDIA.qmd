@@ -54,8 +54,10 @@ The whole thing is static files, in the same spirit as this site:
 4. TLS renews itself, including a wildcard certificate for names that don't
    exist yet, via a tiny delegated DNS zone.
 
-If you'd like the same setup for your company, the write-up and tooling are
-something we're planning to share. Email [sam@diligentservices.io](mailto:sam@diligentservices.io)
-if you want it sooner.
+If you'd like the same setup for your company, the whole stack is public at
+[github.com/samstevenm/rraas](https://github.com/samstevenm/rraas) — RickRoll
+as a Service, MIT licensed, our production config as-is. Fork it, swap the
+names, roll your friends. Email
+[sam@diligentservices.io](mailto:sam@diligentservices.io) if you get stuck.
 
 (G611)
