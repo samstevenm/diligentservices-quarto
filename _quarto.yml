@@ -14,6 +14,8 @@ website:
     left: "Diligent Services · Lighting & Control Integration · California"
     center: "Diligent Services is a DBA of Carmelita Enterprises Inc."
     right:
+      - text: "The people"
+        href: https://at.diligentservices.io/
       - text: "Support"
         href: support/index.qmd
       - text: "Contact"
