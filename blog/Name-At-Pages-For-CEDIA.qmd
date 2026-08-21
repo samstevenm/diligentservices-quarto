@@ -1,0 +1,61 @@
+---
+title: "We Gave Everyone a URL Instead of a Business Card"
+description: "For CEDIA we built name.at.diligentservices.io pages for the team: a MySpace-flavored profile, a downloadable contact card, a QR code, and one Rick Astley surprise. Here's how it works and why it's all static files."
+author: "Sam M"
+date: "2026-08-21"
+draft: true
+categories:
+  - Web Development
+  - Self-Hosting
+  - CEDIA
+format:
+  html:
+    toc: true
+tags:
+  - CEDIA
+  - Static Sites
+  - nginx
+---
+
+<!-- DRAFT — review-gated per house rules. Jane wrote this (G611); Sam edits
+     and flips draft: false when he's happy. -->
+
+Business cards are forgettable. QR codes that open a business card are also
+forgettable. So before CEDIA we gave everyone at Diligent Services a page at
+their own name, like `sam.at.diligentservices.io`.
+
+We stole the idea from [at.hn](https://at.hn), which we found on Hacker News.
+
+## What a page does
+
+Each page is an old-school, MySpace-flavored profile: photo on the left, bio on
+the right, and a "Save my card" button that downloads a vCard with a phone
+number, email, and the page URL. Add `/qr` to any page and you get a QR code
+for it, sized for a badge or a bar napkin.
+
+There is one more thing. The first time a browser opens one of our pages, it
+plays about ten seconds of Rick Astley before showing the profile. You can skip
+it, and a cookie means it only happens once. Every roll increments a counter,
+and `rickroll.at.diligentservices.io` shows the canonical video plus a
+leaderboard of who has been rolled the most. Yes, you can cheat with incognito
+mode. We know.
+
+## How it's built
+
+The whole thing is static files, in the same spirit as this site:
+
+1. Profiles are flat TOML files. A small Python script renders them to HTML,
+   vCards, and QR codes at build time.
+2. A safety check runs before every build and refuses to publish a page with a
+   street address, a birthday, or a phone number anywhere it doesn't belong.
+3. The rickroll counter is an nginx `empty_gif` beacon written to its own
+   access log. A one-minute timer folds the log into a static
+   `leaderboard.json`. No database, no backend, nothing to get owned.
+4. TLS renews itself, including a wildcard certificate for names that don't
+   exist yet, via a tiny delegated DNS zone.
+
+If you'd like the same setup for your company, the write-up and tooling are
+something we're planning to share. Email [sam@diligentservices.io](mailto:sam@diligentservices.io)
+if you want it sooner.
+
+(G611)
