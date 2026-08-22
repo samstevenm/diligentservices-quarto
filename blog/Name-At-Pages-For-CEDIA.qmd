@@ -3,7 +3,7 @@ title: "We Gave Everyone a URL Instead of a Business Card"
 description: "For CEDIA we built name.at.diligentservices.io pages for the team: a MySpace-flavored profile, a downloadable contact card, a QR code, and one Rick Astley surprise. Here's how it works and why it's all static files."
 author: "Sam M"
 date: "2026-08-21"
-draft: true
+draft: false
 categories:
   - Web Development
   - Self-Hosting
