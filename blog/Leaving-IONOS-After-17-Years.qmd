@@ -1,0 +1,142 @@
+---
+title: "Leaving IONOS After 17 Years: Pull It All Down, Back It Up, Then Move"
+author: "Sam M."
+date: "2026-07-25"
+categories: [DNS, email, domains, migration, self-hosting, security, Diligent Services]
+draft: true
+format: html
+---
+
+I registered samstevenm.com and samstevenm.net at 1&1 in May 2009. The company
+became IONOS somewhere along the way, the hosting contract became an "Expert"
+plan, and the bill crept to $18.45 a month once a "PHP 8.1 Extended Support"
+surcharge landed this spring. That's about $221 a year for a webspace I hadn't
+touched in a decade and two domains I could host anywhere. The rest of our
+domains already live at Namecheap with mail at Fastmail, so with the contract
+renewal twelve days out, we moved these last two. The whole thing ran in one
+afternoon: archive in the morning, DNS and mail cutover after lunch, registrar
+transfers confirmed before dinner.
+
+The order of operations is the whole post. Archive first, inventory second,
+build the new zone before touching the old one, transfer before you cancel
+anything. Do it in that order and there's no outage and nothing lost. Do it in
+the other order and you find out what was on that server after it's gone.
+
+## Step 1: Pull everything down
+
+Before changing a single record we mirrored the entire webspace over SFTP:
+4,365 files, about 2 GB, into an immutable archive folder that our restic
+backups cover. Then we curated. About 400 MB of it turned out to be genuinely
+irreplaceable: my dad's project spreadsheets from the original Diligent
+Services Inc era with his own job-numbering system, a Lutron Vive parser I
+wrote with 226 parsed hub reports, the recorded plat and survey for the house
+we owned in Washington during my Navy years, every resume I wrote in 2014,
+scans of my service records. Seventeen years of a personal webspace is an
+accidental family archive. It's now filed where our internal search actually
+indexes it.
+
+The lesson: the webspace is the part of a hosting contract you can't re-buy.
+DNS records can be rebuilt from a dig. The files cannot. Mirror first, verify
+the copy, then proceed.
+
+## Step 2: Read what you just downloaded
+
+This is the step people skip, and it's where the surprises were. In that
+17-year-old webspace we found:
+
+- **An actual malware webshell**, complete with a "with love from moscow"
+  string, that fetched and executed a payload from an anonymous gist. The old
+  shared host had been compromised at some point. An IONOS console note later
+  corroborated it: an abuse ticket from 2018, "Password compromised," on the
+  main SFTP user.
+- **Live-looking credentials hardcoded in forgotten PHP**: an old MySQL
+  database password, a Nest integration with a Google account password and API
+  key in plaintext, and a gate page in front of a still-working Dropbox share.
+
+None of that came anywhere near the curated archive; it stays quarantined in
+the raw mirror, and every credential goes through a verify-dead-or-rotate
+pass. If you're leaving a host you've been on since the 2000s, assume there
+are skeletons and go looking for them deliberately. Canceling the contract
+doesn't rotate a password you reused somewhere else in 2012.
+
+## Step 3: Inventory before you touch anything
+
+An external `whois` and `dig` pass got us most of the picture: registrar
+locks (one domain already unlocked, one not), identical DNS zones on both
+domains, MX still live at IONOS. That last one matters. Live MX means real
+mailboxes, and mailboxes gate everything, because the moment you cancel the
+contract they're gone.
+
+Then a ten-minute walk through the IONOS console, signed in, filled in what
+the outside view can't show:
+
+- **Mail topology.** Eleven addresses that turned out to be six real
+  mailboxes plus five forwards. The forwards were already pointing off-IONOS;
+  the six mailboxes needed import targets at Fastmail.
+- **DKIM records the external dig missed.** Three selector CNAMEs that never
+  show up unless you know to probe for them. The console zone export is the
+  truth; a blind dig is a guess.
+- **The included-domain trap.** Both domains were "included" in the hosting
+  contract. Cancel the contract first and the domains go down with it.
+  Transfers complete first, cancellation last. This ordering is not optional.
+- **Contract reality.** Renewal date, monthly line items, which SFTP users
+  and databases existed. All of it screenshotted into our ops log before
+  anything changed.
+
+## Step 4: Build the new zone before you flip the old one
+
+The cutover trick that makes this a zero-outage move: we built the complete
+final zone at Namecheap's FreeDNS before repointing anything. Ten records per
+domain, including the old web A records exactly as they were, plus Fastmail's
+MX pair, SPF, three DKIM CNAMEs, and DMARC. Mail was pointed at Fastmail only
+in the new zone. There was no intermediate state where the old zone got a
+Fastmail MX or the new zone still had IONOS mail; one flip, one mail cutover,
+no double transition.
+
+Fastmail's side was ready first: both domains added, catch-alls routing every
+one of those eleven legacy addresses into accounts we actually read. Then the
+nameserver repoint at IONOS. The pleasant surprise: IONOS's old nameservers
+keep answering after you repoint, so cached resolvers never went dark while
+Namecheap's verification ran. FreeDNS came alive about 42 minutes after the
+flip and the public zones matched our build exactly.
+
+## Step 5: Transfer, then repoint the web, then cancel
+
+With DNS serving from the new home, the registrar transfers were the easy
+part: unlock, EPP codes, about $24 for both domains, and the transfers
+confirmed the same afternoon. `whois` said Namecheap for both before the day
+ended, and because .com/.net transfers carry the expiry with them, we keep the
+year we'd already paid for.
+
+Then the part we'd actually been waiting to do: the web A records pointing at
+IONOS parking got deleted, and both apexes now alias to the family server
+that already hosts our other sites. The old site answers from our own nginx
+now.
+
+What remains is teardown on a timer: IMAP-import the six old mailboxes into
+Fastmail, hold the IONOS mailboxes about 48 hours for a final delta pass, and
+let the already-filed cancellation kill the contract before the renewal date.
+The compromised-in-2018 SFTP password stops mattering the moment the contract
+dies with it.
+
+## The arithmetic
+
+$221 a year became roughly $30 a year in domain renewals. DNS is free at the
+registrar, and mail rides the Fastmail plan we already pay for. The migration
+itself cost $24 in transfer fees and an afternoon. The archive, honestly, was
+worth more than the savings.
+
+## How this was actually driven
+
+Most of the clicking wasn't me. My AI operator ran the recon, drove the
+browser through the IONOS console and the Namecheap zone builder, mirrored
+the webspace, wrote the runbook, and flagged the webshell. I stayed on the
+things that should never touch an agent's transcript: EPP codes, payments,
+and passwords. That split, agent does the inventory and the repetitive record
+entry while a human holds the secrets and the go/no-go, is what made a
+17-year hosting exit fit in one afternoon.
+
+---
+
+> **Standard Disclaimer**
+This post is a mix of human and AI effort [(G611)](/g611/). While I've reviewed and finalized the content, some parts reflect AI-generated input. Always do your own due diligence and consult professionals when needed.
